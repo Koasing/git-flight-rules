@@ -1,12 +1,11 @@
-# 깃을 위한 flight rules
+# Git을 위한 비행 규칙
 
 🌍
 *[English](README.md) ∙ [Español](README_es.md)  ∙  [Русский](README_ru.md) ∙ [简体中文](README_zh-CN.md)∙ [한국어](README_kr.md)  ∙ [Tiếng Việt](README_vi.md)*
 
-#### flight rules 가 뭐야?
+#### "비행 규칙"이 뭐에요?
 
-뭔가 잘못 됐을 때 뭘 해야할지에 대한 [우주비행사를 위한 가이드](https://www.jsc.nasa.gov/news/columbia/fr_generic.pdf) (여기선 깃을 쓰는 개발자를 위한) 
-
+[우주비행사를 위한 가이드](https://www.jsc.nasa.gov/news/columbia/fr_generic.pdf) (여기선 Git을 쓰는 개발자를 위한 가이드) 입니다. 무언가가 잘못 되었을 때 어떻게 해야 하는지를 담고 있지요.
 
 >  *Flight Rules* 는 어떤 문제 X가 발생한 이유와 그 단계의 매뉴얼에서 어렵사리 얻은 지식이에요. 기본적으로 각 시나리오의 매우 자세하고 구체적인 운영 절차랍니다. [...]
 
@@ -16,39 +15,43 @@
 
 #### 이 문서의 규칙
 
-명확하게 하기 위해 이 문서의 모든 예제는 현재 브랜치를 표시하고 스테이지에 변경이 있는지를 나타내기 위해 커스텀 된 배시 프롬프트를 써요. 브랜치는 괄호 안에 있고, 브랜치 다음의 *는 스테이지의 변경된 것을 나타내요.  
+표기를 명확하게 하기 위해, 이 문서의 모든 예제는 현재 브랜치를 표시하고 스테이지에 변경이 있는지를 나타내도록 수정된 bash 프롬프트를 써요. 브랜치는 괄호 안에 명시되고, 브랜치 다음의 `*`는 스테이지에 변경점이 있음을 나타내요.  
+
+모든 명령어는 적어도 git 버전 2.13.0 에서는 작동할 거에요. [git 웹사이트](https://www.git-scm.com/)에 방문해서 로컬 git 버전을 최신으로 업데이트 하세요.
 
 [![Join the chat at https://gitter.im/k88hudson/git-flight-rules](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/k88hudson/git-flight-rules?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-  - [레파지토리](#%EB%A0%88%ED%8C%8C%EC%A7%80%ED%86%A0%EB%A6%AC)
-    - [로컬 레파지토리에서 시작하고 싶어](#%EB%A1%9C%EC%BB%AC-%EB%A0%88%ED%8C%8C%EC%A7%80%ED%86%A0%EB%A6%AC%EC%97%90%EC%84%9C-%EC%8B%9C%EC%9E%91%ED%95%98%EA%B3%A0-%EC%8B%B6%EC%96%B4)
-    - [난 리모트 레파지토리를 복제해오고 싶어](#%EB%82%9C-%EB%A6%AC%EB%AA%A8%ED%8A%B8-%EB%A0%88%ED%8C%8C%EC%A7%80%ED%86%A0%EB%A6%AC%EB%A5%BC-%EB%B3%B5%EC%A0%9C%ED%95%B4%EC%98%A4%EA%B3%A0-%EC%8B%B6%EC%96%B4)
+  - [저장소](#%EC%A0%80%EC%9E%A5%EC%86%8C)
+    - [로컬 저장소를 새로 만들고 싶어](#%EB%A1%9C%EC%BB%AC-%EC%A0%80%EC%9E%A5%EC%86%8C%EB%A5%BC-%EC%83%88%EB%A1%9C-%EB%A7%8C%EB%93%A4%EA%B3%A0-%EC%8B%B6%EC%96%B4)
+    - [원격 저장소를 복제해 오고 싶어](#%EC%9B%90%EA%B2%A9-%EC%A0%80%EC%9E%A5%EC%86%8C%EB%A5%BC-%EB%B3%B5%EC%A0%9C%ED%95%B4-%EC%98%A4%EA%B3%A0-%EC%8B%B6%EC%96%B4)
   - [커밋 수정](#%EC%BB%A4%EB%B0%8B-%EC%88%98%EC%A0%95)
     - [내가 방금 어떤 커밋을 남겼지?](#%EB%82%B4%EA%B0%80-%EB%B0%A9%EA%B8%88-%EC%96%B4%EB%96%A4-%EC%BB%A4%EB%B0%8B%EC%9D%84-%EB%82%A8%EA%B2%BC%EC%A7%80)
     - [커밋 메세지를 잘못 썼어](#%EC%BB%A4%EB%B0%8B-%EB%A9%94%EC%84%B8%EC%A7%80%EB%A5%BC-%EC%9E%98%EB%AA%BB-%EC%8D%BC%EC%96%B4)
-    - [커밋을 다른 이름과 이메일 설정으로 해버렸어](#%EC%BB%A4%EB%B0%8B%EC%9D%84-%EB%8B%A4%EB%A5%B8-%EC%9D%B4%EB%A6%84%EA%B3%BC-%EC%9D%B4%EB%A9%94%EC%9D%BC-%EC%84%A4%EC%A0%95%EC%9C%BC%EB%A1%9C-%ED%95%B4%EB%B2%84%EB%A0%B8%EC%96%B4)
+    - [커밋을 다른 이름과 이메일 설정으로 해 버렸어](#%EC%BB%A4%EB%B0%8B%EC%9D%84-%EB%8B%A4%EB%A5%B8-%EC%9D%B4%EB%A6%84%EA%B3%BC-%EC%9D%B4%EB%A9%94%EC%9D%BC-%EC%84%A4%EC%A0%95%EC%9C%BC%EB%A1%9C-%ED%95%B4-%EB%B2%84%EB%A0%B8%EC%96%B4)
     - [지난 커밋에서 파일 하나를 지우고 싶어](#%EC%A7%80%EB%82%9C-%EC%BB%A4%EB%B0%8B%EC%97%90%EC%84%9C-%ED%8C%8C%EC%9D%BC-%ED%95%98%EB%82%98%EB%A5%BC-%EC%A7%80%EC%9A%B0%EA%B3%A0-%EC%8B%B6%EC%96%B4)
     - [마지막 커밋을 지우고 싶어](#%EB%A7%88%EC%A7%80%EB%A7%89-%EC%BB%A4%EB%B0%8B%EC%9D%84-%EC%A7%80%EC%9A%B0%EA%B3%A0-%EC%8B%B6%EC%96%B4)
-    - [임의적인 커밋 지우기](#%EC%9E%84%EC%9D%98%EC%A0%81%EC%9D%B8-%EC%BB%A4%EB%B0%8B-%EC%A7%80%EC%9A%B0%EA%B8%B0)
+    - [임의의 커밋 지우기](#%EC%9E%84%EC%9D%98%EC%9D%98-%EC%BB%A4%EB%B0%8B-%EC%A7%80%EC%9A%B0%EA%B8%B0)
     - [수정된 커밋을 푸시했는데, 에러 메세지가 떠](#%EC%88%98%EC%A0%95%EB%90%9C-%EC%BB%A4%EB%B0%8B%EC%9D%84-%ED%91%B8%EC%8B%9C%ED%96%88%EB%8A%94%EB%8D%B0-%EC%97%90%EB%9F%AC-%EB%A9%94%EC%84%B8%EC%A7%80%EA%B0%80-%EB%96%A0)
-    - [하드 리셋을 해버렸는데 되돌리고 싶어](#%ED%95%98%EB%93%9C-%EB%A6%AC%EC%85%8B%EC%9D%84-%ED%95%B4%EB%B2%84%EB%A0%B8%EB%8A%94%EB%8D%B0-%EB%90%98%EB%8F%8C%EB%A6%AC%EA%B3%A0-%EC%8B%B6%EC%96%B4)
-    - [머지를 실수로 커밋, 푸시해버렸어](#%EB%A8%B8%EC%A7%80%EB%A5%BC-%EC%8B%A4%EC%88%98%EB%A1%9C-%EC%BB%A4%EB%B0%8B-%ED%91%B8%EC%8B%9C%ED%95%B4%EB%B2%84%EB%A0%B8%EC%96%B4)
+    - [실수로 하드 리셋을 했는데, 작업하던걸 되살리고 싶어](#%EC%8B%A4%EC%88%98%EB%A1%9C-%ED%95%98%EB%93%9C-%EB%A6%AC%EC%85%8B%EC%9D%84-%ED%96%88%EB%8A%94%EB%8D%B0-%EC%9E%91%EC%97%85%ED%95%98%EB%8D%98%EA%B1%B8-%EB%90%98%EC%82%B4%EB%A6%AC%EA%B3%A0-%EC%8B%B6%EC%96%B4)
+    - [실수로 머지를 커밋하고 푸시해 버렸어](#%EC%8B%A4%EC%88%98%EB%A1%9C-%EB%A8%B8%EC%A7%80%EB%A5%BC-%EC%BB%A4%EB%B0%8B%ED%95%98%EA%B3%A0-%ED%91%B8%EC%8B%9C%ED%95%B4-%EB%B2%84%EB%A0%B8%EC%96%B4)
+    - [실수로 공개되면 안 되는 자료를 담은 파일을 커밋하고 푸시했어](#%EC%8B%A4%EC%88%98%EB%A1%9C-%EA%B3%B5%EA%B0%9C%EB%90%98%EB%A9%B4-%EC%95%88-%EB%90%98%EB%8A%94-%EC%9E%90%EB%A3%8C%EB%A5%BC-%EB%8B%B4%EC%9D%80-%ED%8C%8C%EC%9D%BC%EC%9D%84-%EC%BB%A4%EB%B0%8B%ED%95%98%EA%B3%A0-%ED%91%B8%EC%8B%9C%ED%96%88%EC%96%B4)
   - [스테이지](#%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%80)
-    - [지난 커밋에 스테이지 변경점을 추가하고 싶어](#%EC%A7%80%EB%82%9C-%EC%BB%A4%EB%B0%8B%EC%97%90-%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%80-%EB%B3%80%EA%B2%BD%EC%A0%90%EC%9D%84-%EC%B6%94%EA%B0%80%ED%95%98%EA%B3%A0-%EC%8B%B6%EC%96%B4)
-    - [전체가 아닌 새 파일만 스테이지에 올리고 싶어](#%EC%A0%84%EC%B2%B4%EA%B0%80-%EC%95%84%EB%8B%8C-%EC%83%88-%ED%8C%8C%EC%9D%BC%EB%A7%8C-%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%80%EC%97%90-%EC%98%AC%EB%A6%AC%EA%B3%A0-%EC%8B%B6%EC%96%B4)
+    - [스테이지의 변경점을 이전 커밋에 추가하고 싶어](#%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%80%EC%9D%98-%EB%B3%80%EA%B2%BD%EC%A0%90%EC%9D%84-%EC%9D%B4%EC%A0%84-%EC%BB%A4%EB%B0%8B%EC%97%90-%EC%B6%94%EA%B0%80%ED%95%98%EA%B3%A0-%EC%8B%B6%EC%96%B4)
+    - [새 파일 중 전체가 아닌 일부분만 스테이지 하고 싶어.](#%EC%83%88-%ED%8C%8C%EC%9D%BC-%EC%A4%91-%EC%A0%84%EC%B2%B4%EA%B0%80-%EC%95%84%EB%8B%8C-%EC%9D%BC%EB%B6%80%EB%B6%84%EB%A7%8C-%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%80-%ED%95%98%EA%B3%A0-%EC%8B%B6%EC%96%B4)
     - [하나의 파일 변경점을 두개의 다른 커밋에 남기고 싶어](#%ED%95%98%EB%82%98%EC%9D%98-%ED%8C%8C%EC%9D%BC-%EB%B3%80%EA%B2%BD%EC%A0%90%EC%9D%84-%EB%91%90%EA%B0%9C%EC%9D%98-%EB%8B%A4%EB%A5%B8-%EC%BB%A4%EB%B0%8B%EC%97%90-%EB%82%A8%EA%B8%B0%EA%B3%A0-%EC%8B%B6%EC%96%B4)
-    - [아직 스테이지에 안 올라간 변경점을 스테이지에 추가하고, 스테이지에 있는 변경점을 다시 빼고 싶어](#%EC%95%84%EC%A7%81-%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%80%EC%97%90-%EC%95%88-%EC%98%AC%EB%9D%BC%EA%B0%84-%EB%B3%80%EA%B2%BD%EC%A0%90%EC%9D%84-%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%80%EC%97%90-%EC%B6%94%EA%B0%80%ED%95%98%EA%B3%A0-%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%80%EC%97%90-%EC%9E%88%EB%8A%94-%EB%B3%80%EA%B2%BD%EC%A0%90%EC%9D%84-%EB%8B%A4%EC%8B%9C-%EB%B9%BC%EA%B3%A0-%EC%8B%B6%EC%96%B4)
+    - [아직 스테이지에 안 올라간 변경점을 스테이지에 추가하고, 스테이지에 있는 변경점은 다시 빼고 싶어](#%EC%95%84%EC%A7%81-%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%80%EC%97%90-%EC%95%88-%EC%98%AC%EB%9D%BC%EA%B0%84-%EB%B3%80%EA%B2%BD%EC%A0%90%EC%9D%84-%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%80%EC%97%90-%EC%B6%94%EA%B0%80%ED%95%98%EA%B3%A0-%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%80%EC%97%90-%EC%9E%88%EB%8A%94-%EB%B3%80%EA%B2%BD%EC%A0%90%EC%9D%80-%EB%8B%A4%EC%8B%9C-%EB%B9%BC%EA%B3%A0-%EC%8B%B6%EC%96%B4)
   - [스테이지 전의 변경점](#%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%80-%EC%A0%84%EC%9D%98-%EB%B3%80%EA%B2%BD%EC%A0%90)
     - [스테이지 전의 변경점을 새 브랜치로 옮기고 싶어](#%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%80-%EC%A0%84%EC%9D%98-%EB%B3%80%EA%B2%BD%EC%A0%90%EC%9D%84-%EC%83%88-%EB%B8%8C%EB%9E%9C%EC%B9%98%EB%A1%9C-%EC%98%AE%EA%B8%B0%EA%B3%A0-%EC%8B%B6%EC%96%B4)
-    - [스테이지전 변경점을 만들어둔 다른 브랜치로 옮기고 싶어](#%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%80%EC%A0%84-%EB%B3%80%EA%B2%BD%EC%A0%90%EC%9D%84-%EB%A7%8C%EB%93%A4%EC%96%B4%EB%91%94-%EB%8B%A4%EB%A5%B8-%EB%B8%8C%EB%9E%9C%EC%B9%98%EB%A1%9C-%EC%98%AE%EA%B8%B0%EA%B3%A0-%EC%8B%B6%EC%96%B4)
+    - [스테이지 전의 변경점을 이미 존재하는 다른 브랜치로 옮기고 싶어](#%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%80-%EC%A0%84%EC%9D%98-%EB%B3%80%EA%B2%BD%EC%A0%90%EC%9D%84-%EC%9D%B4%EB%AF%B8-%EC%A1%B4%EC%9E%AC%ED%95%98%EB%8A%94-%EB%8B%A4%EB%A5%B8-%EB%B8%8C%EB%9E%9C%EC%B9%98%EB%A1%9C-%EC%98%AE%EA%B8%B0%EA%B3%A0-%EC%8B%B6%EC%96%B4)
     - [내 로컬에 있는 커밋 안된 변경점을 다 무시하고 싶어 (스테이징 됐던 안됐던)](#%EB%82%B4-%EB%A1%9C%EC%BB%AC%EC%97%90-%EC%9E%88%EB%8A%94-%EC%BB%A4%EB%B0%8B-%EC%95%88%EB%90%9C-%EB%B3%80%EA%B2%BD%EC%A0%90%EC%9D%84-%EB%8B%A4-%EB%AC%B4%EC%8B%9C%ED%95%98%EA%B3%A0-%EC%8B%B6%EC%96%B4-%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%95-%EB%90%90%EB%8D%98-%EC%95%88%EB%90%90%EB%8D%98)
-    - [스테이지 안된 특정 변경점을 지우고 싶어](#%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%80-%EC%95%88%EB%90%9C-%ED%8A%B9%EC%A0%95-%EB%B3%80%EA%B2%BD%EC%A0%90%EC%9D%84-%EC%A7%80%EC%9A%B0%EA%B3%A0-%EC%8B%B6%EC%96%B4)
+    - [스테이지 안된 특정 변경 사항을 지우고 싶어](#%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%80-%EC%95%88%EB%90%9C-%ED%8A%B9%EC%A0%95-%EB%B3%80%EA%B2%BD-%EC%82%AC%ED%95%AD%EC%9D%84-%EC%A7%80%EC%9A%B0%EA%B3%A0-%EC%8B%B6%EC%96%B4)
     - [스테이지 안된 특정 파일을 지우고 싶어](#%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%80-%EC%95%88%EB%90%9C-%ED%8A%B9%EC%A0%95-%ED%8C%8C%EC%9D%BC%EC%9D%84-%EC%A7%80%EC%9A%B0%EA%B3%A0-%EC%8B%B6%EC%96%B4)
     - [로컬에 있는 스테이지 안된 변경점만 지우고 싶어](#%EB%A1%9C%EC%BB%AC%EC%97%90-%EC%9E%88%EB%8A%94-%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%80-%EC%95%88%EB%90%9C-%EB%B3%80%EA%B2%BD%EC%A0%90%EB%A7%8C-%EC%A7%80%EC%9A%B0%EA%B3%A0-%EC%8B%B6%EC%96%B4)
-    - [트래킹 안된 파일들 다 지우고 싶어](#%ED%8A%B8%EB%9E%98%ED%82%B9-%EC%95%88%EB%90%9C-%ED%8C%8C%EC%9D%BC%EB%93%A4-%EB%8B%A4-%EC%A7%80%EC%9A%B0%EA%B3%A0-%EC%8B%B6%EC%96%B4)
+    - [추적되지 않는 파일들 다 지우고 싶어](#%EC%B6%94%EC%A0%81%EB%90%98%EC%A7%80-%EC%95%8A%EB%8A%94-%ED%8C%8C%EC%9D%BC%EB%93%A4-%EB%8B%A4-%EC%A7%80%EC%9A%B0%EA%B3%A0-%EC%8B%B6%EC%96%B4)
+    - [스테이지된 파일 중 일부를 빼 버리고 싶어](#%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%A7%80%EB%90%9C-%ED%8C%8C%EC%9D%BC-%EC%A4%91-%EC%9D%BC%EB%B6%80%EB%A5%BC-%EB%B9%BC-%EB%B2%84%EB%A6%AC%EA%B3%A0-%EC%8B%B6%EC%96%B4)
   - [브랜치](#%EB%B8%8C%EB%9E%9C%EC%B9%98)
     - [모든 브랜치 리스트를 보고 싶어](#%EB%AA%A8%EB%93%A0-%EB%B8%8C%EB%9E%9C%EC%B9%98-%EB%A6%AC%EC%8A%A4%ED%8A%B8%EB%A5%BC-%EB%B3%B4%EA%B3%A0-%EC%8B%B6%EC%96%B4)
     - [커밋에서 브랜치 만들기](#%EC%BB%A4%EB%B0%8B%EC%97%90%EC%84%9C-%EB%B8%8C%EB%9E%9C%EC%B9%98-%EB%A7%8C%EB%93%A4%EA%B8%B0)
@@ -58,34 +61,35 @@
     - [다른 레퍼런스 같은 곳에서 모든 파일을 유지하고 싶어](#%EB%8B%A4%EB%A5%B8-%EB%A0%88%ED%8D%BC%EB%9F%B0%EC%8A%A4-%EA%B0%99%EC%9D%80-%EA%B3%B3%EC%97%90%EC%84%9C-%EB%AA%A8%EB%93%A0-%ED%8C%8C%EC%9D%BC%EC%9D%84-%EC%9C%A0%EC%A7%80%ED%95%98%EA%B3%A0-%EC%8B%B6%EC%96%B4)
     - [한 브랜치에 다른 브랜치에 남겼어야 하는 커밋을 여러개 남겼어](#%ED%95%9C-%EB%B8%8C%EB%9E%9C%EC%B9%98%EC%97%90-%EB%8B%A4%EB%A5%B8-%EB%B8%8C%EB%9E%9C%EC%B9%98%EC%97%90-%EB%82%A8%EA%B2%BC%EC%96%B4%EC%95%BC-%ED%95%98%EB%8A%94-%EC%BB%A4%EB%B0%8B%EC%9D%84-%EC%97%AC%EB%9F%AC%EA%B0%9C-%EB%82%A8%EA%B2%BC%EC%96%B4)
     - [업스트림에선 지워진 로컬 브랜치를 지우고 싶어](#%EC%97%85%EC%8A%A4%ED%8A%B8%EB%A6%BC%EC%97%90%EC%84%A0-%EC%A7%80%EC%9B%8C%EC%A7%84-%EB%A1%9C%EC%BB%AC-%EB%B8%8C%EB%9E%9C%EC%B9%98%EB%A5%BC-%EC%A7%80%EC%9A%B0%EA%B3%A0-%EC%8B%B6%EC%96%B4)
-    - [브랜치를 지워버렸어](#%EB%B8%8C%EB%9E%9C%EC%B9%98%EB%A5%BC-%EC%A7%80%EC%9B%8C%EB%B2%84%EB%A0%B8%EC%96%B4)
+    - [실수로 브랜치를 지워버렸어](#%EC%8B%A4%EC%88%98%EB%A1%9C-%EB%B8%8C%EB%9E%9C%EC%B9%98%EB%A5%BC-%EC%A7%80%EC%9B%8C%EB%B2%84%EB%A0%B8%EC%96%B4)
     - [브랜치를 지우고 싶어](#%EB%B8%8C%EB%9E%9C%EC%B9%98%EB%A5%BC-%EC%A7%80%EC%9A%B0%EA%B3%A0-%EC%8B%B6%EC%96%B4)
     - [여러개의 브랜치를 지우고 싶어](#%EC%97%AC%EB%9F%AC%EA%B0%9C%EC%9D%98-%EB%B8%8C%EB%9E%9C%EC%B9%98%EB%A5%BC-%EC%A7%80%EC%9A%B0%EA%B3%A0-%EC%8B%B6%EC%96%B4)
     - [브랜치 이름을 바꾸고 싶어](#%EB%B8%8C%EB%9E%9C%EC%B9%98-%EC%9D%B4%EB%A6%84%EC%9D%84-%EB%B0%94%EA%BE%B8%EA%B3%A0-%EC%8B%B6%EC%96%B4)
-    - [다른 사람이 작업중인 리모트 브랜치로 체크아웃 하고 싶어](#%EB%8B%A4%EB%A5%B8-%EC%82%AC%EB%9E%8C%EC%9D%B4-%EC%9E%91%EC%97%85%EC%A4%91%EC%9D%B8-%EB%A6%AC%EB%AA%A8%ED%8A%B8-%EB%B8%8C%EB%9E%9C%EC%B9%98%EB%A1%9C-%EC%B2%B4%ED%81%AC%EC%95%84%EC%9B%83-%ED%95%98%EA%B3%A0-%EC%8B%B6%EC%96%B4)
-    - [현재 로컬 브랜치로 새로운 리모트 브랜치를 만들고 싶어](#%ED%98%84%EC%9E%AC-%EB%A1%9C%EC%BB%AC-%EB%B8%8C%EB%9E%9C%EC%B9%98%EB%A1%9C-%EC%83%88%EB%A1%9C%EC%9A%B4-%EB%A6%AC%EB%AA%A8%ED%8A%B8-%EB%B8%8C%EB%9E%9C%EC%B9%98%EB%A5%BC-%EB%A7%8C%EB%93%A4%EA%B3%A0-%EC%8B%B6%EC%96%B4)
-    - [리모트 브랜치를 로컬 브랜치를 위한 업스트림으로 설정하고 싶어](#%EB%A6%AC%EB%AA%A8%ED%8A%B8-%EB%B8%8C%EB%9E%9C%EC%B9%98%EB%A5%BC-%EB%A1%9C%EC%BB%AC-%EB%B8%8C%EB%9E%9C%EC%B9%98%EB%A5%BC-%EC%9C%84%ED%95%9C-%EC%97%85%EC%8A%A4%ED%8A%B8%EB%A6%BC%EC%9C%BC%EB%A1%9C-%EC%84%A4%EC%A0%95%ED%95%98%EA%B3%A0-%EC%8B%B6%EC%96%B4)
-    - [HEAD를 기본 리모트 브랜치로 트래킹하도록 설정하고 싶어](#head%EB%A5%BC-%EA%B8%B0%EB%B3%B8-%EB%A6%AC%EB%AA%A8%ED%8A%B8-%EB%B8%8C%EB%9E%9C%EC%B9%98%EB%A1%9C-%ED%8A%B8%EB%9E%98%ED%82%B9%ED%95%98%EB%8F%84%EB%A1%9D-%EC%84%A4%EC%A0%95%ED%95%98%EA%B3%A0-%EC%8B%B6%EC%96%B4)
-    - [다른 브랜치에 변경점을 잘못 남겼어](#%EB%8B%A4%EB%A5%B8-%EB%B8%8C%EB%9E%9C%EC%B9%98%EC%97%90-%EB%B3%80%EA%B2%BD%EC%A0%90%EC%9D%84-%EC%9E%98%EB%AA%BB-%EB%82%A8%EA%B2%BC%EC%96%B4)
-  - [리베이스와 머지](#%EB%A6%AC%EB%B2%A0%EC%9D%B4%EC%8A%A4%EC%99%80-%EB%A8%B8%EC%A7%80)
-    - [리베이스/머지 한 걸 되돌리고 싶어](#%EB%A6%AC%EB%B2%A0%EC%9D%B4%EC%8A%A4%EB%A8%B8%EC%A7%80-%ED%95%9C-%EA%B1%B8-%EB%90%98%EB%8F%8C%EB%A6%AC%EA%B3%A0-%EC%8B%B6%EC%96%B4)
+    - [다른 사람이 작업중인 원격 브랜치로 체크아웃 하고 싶어](#%EB%8B%A4%EB%A5%B8-%EC%82%AC%EB%9E%8C%EC%9D%B4-%EC%9E%91%EC%97%85%EC%A4%91%EC%9D%B8-%EC%9B%90%EA%B2%A9-%EB%B8%8C%EB%9E%9C%EC%B9%98%EB%A1%9C-%EC%B2%B4%ED%81%AC%EC%95%84%EC%9B%83-%ED%95%98%EA%B3%A0-%EC%8B%B6%EC%96%B4)
+    - [현재 로컬 브랜치로 새로운 원격 브랜치를 만들고 싶어](#%ED%98%84%EC%9E%AC-%EB%A1%9C%EC%BB%AC-%EB%B8%8C%EB%9E%9C%EC%B9%98%EB%A1%9C-%EC%83%88%EB%A1%9C%EC%9A%B4-%EC%9B%90%EA%B2%A9-%EB%B8%8C%EB%9E%9C%EC%B9%98%EB%A5%BC-%EB%A7%8C%EB%93%A4%EA%B3%A0-%EC%8B%B6%EC%96%B4)
+    - [원격 브랜치를 로컬 브랜치의 업스트림으로 설정하고 싶어](#%EC%9B%90%EA%B2%A9-%EB%B8%8C%EB%9E%9C%EC%B9%98%EB%A5%BC-%EB%A1%9C%EC%BB%AC-%EB%B8%8C%EB%9E%9C%EC%B9%98%EC%9D%98-%EC%97%85%EC%8A%A4%ED%8A%B8%EB%A6%BC%EC%9C%BC%EB%A1%9C-%EC%84%A4%EC%A0%95%ED%95%98%EA%B3%A0-%EC%8B%B6%EC%96%B4)
+    - [HEAD를 기본 원격 브랜치로 트래킹하도록 설정하고 싶어](#head%EB%A5%BC-%EA%B8%B0%EB%B3%B8-%EC%9B%90%EA%B2%A9-%EB%B8%8C%EB%9E%9C%EC%B9%98%EB%A1%9C-%ED%8A%B8%EB%9E%98%ED%82%B9%ED%95%98%EB%8F%84%EB%A1%9D-%EC%84%A4%EC%A0%95%ED%95%98%EA%B3%A0-%EC%8B%B6%EC%96%B4)
+    - [잘못된 브랜치에서 변경사항을 만들었어](#%EC%9E%98%EB%AA%BB%EB%90%9C-%EB%B8%8C%EB%9E%9C%EC%B9%98%EC%97%90%EC%84%9C-%EB%B3%80%EA%B2%BD%EC%82%AC%ED%95%AD%EC%9D%84-%EB%A7%8C%EB%93%A4%EC%97%88%EC%96%B4)
+  - [리베이스와 병합](#%EB%A6%AC%EB%B2%A0%EC%9D%B4%EC%8A%A4%EC%99%80-%EB%B3%91%ED%95%A9)
+    - [리베이스/병합한 걸 되돌리고 싶어](#%EB%A6%AC%EB%B2%A0%EC%9D%B4%EC%8A%A4%EB%B3%91%ED%95%A9%ED%95%9C-%EA%B1%B8-%EB%90%98%EB%8F%8C%EB%A6%AC%EA%B3%A0-%EC%8B%B6%EC%96%B4)
     - [리베이스를 했는데, 강제 푸시하고 싶진 않아](#%EB%A6%AC%EB%B2%A0%EC%9D%B4%EC%8A%A4%EB%A5%BC-%ED%96%88%EB%8A%94%EB%8D%B0-%EA%B0%95%EC%A0%9C-%ED%91%B8%EC%8B%9C%ED%95%98%EA%B3%A0-%EC%8B%B6%EC%A7%84-%EC%95%8A%EC%95%84)
-    - [커밋끼리 합치고 싶어](#%EC%BB%A4%EB%B0%8B%EB%81%BC%EB%A6%AC-%ED%95%A9%EC%B9%98%EA%B3%A0-%EC%8B%B6%EC%96%B4)
-      - [안전한 머지 전략](#%EC%95%88%EC%A0%84%ED%95%9C-%EB%A8%B8%EC%A7%80-%EC%A0%84%EB%9E%B5)
+    - [커밋 여러개를 하나로 합쳐야 해](#%EC%BB%A4%EB%B0%8B-%EC%97%AC%EB%9F%AC%EA%B0%9C%EB%A5%BC-%ED%95%98%EB%82%98%EB%A1%9C-%ED%95%A9%EC%B3%90%EC%95%BC-%ED%95%B4)
+      - [안전한 병합 전략](#%EC%95%88%EC%A0%84%ED%95%9C-%EB%B3%91%ED%95%A9-%EC%A0%84%EB%9E%B5)
       - [브랜치를 커밋 하나로 머지해야해](#%EB%B8%8C%EB%9E%9C%EC%B9%98%EB%A5%BC-%EC%BB%A4%EB%B0%8B-%ED%95%98%EB%82%98%EB%A1%9C-%EB%A8%B8%EC%A7%80%ED%95%B4%EC%95%BC%ED%95%B4)
       - [푸시 되지 않은 커밋만 합치고 싶어](#%ED%91%B8%EC%8B%9C-%EB%90%98%EC%A7%80-%EC%95%8A%EC%9D%80-%EC%BB%A4%EB%B0%8B%EB%A7%8C-%ED%95%A9%EC%B9%98%EA%B3%A0-%EC%8B%B6%EC%96%B4)
-      - [머지를 중단해야해](#%EB%A8%B8%EC%A7%80%EB%A5%BC-%EC%A4%91%EB%8B%A8%ED%95%B4%EC%95%BC%ED%95%B4)
+      - [병합을 중단해야해](#%EB%B3%91%ED%95%A9%EC%9D%84-%EC%A4%91%EB%8B%A8%ED%95%B4%EC%95%BC%ED%95%B4)
+    - [브랜치의 부모 커밋을 바꿔야 해](#%EB%B8%8C%EB%9E%9C%EC%B9%98%EC%9D%98-%EB%B6%80%EB%AA%A8-%EC%BB%A4%EB%B0%8B%EC%9D%84-%EB%B0%94%EA%BF%94%EC%95%BC-%ED%95%B4)
     - [브랜치내 모든 커밋이 머지됐는지 확인해](#%EB%B8%8C%EB%9E%9C%EC%B9%98%EB%82%B4-%EB%AA%A8%EB%93%A0-%EC%BB%A4%EB%B0%8B%EC%9D%B4-%EB%A8%B8%EC%A7%80%EB%90%90%EB%8A%94%EC%A7%80-%ED%99%95%EC%9D%B8%ED%95%B4)
     - [대화형 리베이스로 발생가능한 이슈](#%EB%8C%80%ED%99%94%ED%98%95-%EB%A6%AC%EB%B2%A0%EC%9D%B4%EC%8A%A4%EB%A1%9C-%EB%B0%9C%EC%83%9D%EA%B0%80%EB%8A%A5%ED%95%9C-%EC%9D%B4%EC%8A%88)
       - [리베이스 편집 화면에서 'noop'](#%EB%A6%AC%EB%B2%A0%EC%9D%B4%EC%8A%A4-%ED%8E%B8%EC%A7%91-%ED%99%94%EB%A9%B4%EC%97%90%EC%84%9C-noop)
       - [충돌이 있어](#%EC%B6%A9%EB%8F%8C%EC%9D%B4-%EC%9E%88%EC%96%B4)
-  - [스테이시](#%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%8B%9C)
-    - [모든 변경점 스테이시 하기](#%EB%AA%A8%EB%93%A0-%EB%B3%80%EA%B2%BD%EC%A0%90-%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%8B%9C-%ED%95%98%EA%B8%B0)
-    - [특정 파일들만 스테이시 하기](#%ED%8A%B9%EC%A0%95-%ED%8C%8C%EC%9D%BC%EB%93%A4%EB%A7%8C-%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%8B%9C-%ED%95%98%EA%B8%B0)
-    - [메세지와 함께 스테이시 하기](#%EB%A9%94%EC%84%B8%EC%A7%80%EC%99%80-%ED%95%A8%EA%BB%98-%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%8B%9C-%ED%95%98%EA%B8%B0)
-    - [특정 스테이시 목록에서 가져와 적용하기](#%ED%8A%B9%EC%A0%95-%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%8B%9C-%EB%AA%A9%EB%A1%9D%EC%97%90%EC%84%9C-%EA%B0%80%EC%A0%B8%EC%99%80-%EC%A0%81%EC%9A%A9%ED%95%98%EA%B8%B0)
+  - [스태시](#%EC%8A%A4%ED%83%9C%EC%8B%9C)
+    - [모든 변경점을 스태시에 보관하기](#%EB%AA%A8%EB%93%A0-%EB%B3%80%EA%B2%BD%EC%A0%90%EC%9D%84-%EC%8A%A4%ED%83%9C%EC%8B%9C%EC%97%90-%EB%B3%B4%EA%B4%80%ED%95%98%EA%B8%B0)
+    - [특정 파일들만 스태시에 보관하기](#%ED%8A%B9%EC%A0%95-%ED%8C%8C%EC%9D%BC%EB%93%A4%EB%A7%8C-%EC%8A%A4%ED%83%9C%EC%8B%9C%EC%97%90-%EB%B3%B4%EA%B4%80%ED%95%98%EA%B8%B0)
+    - [메세지와 함께 보관하기](#%EB%A9%94%EC%84%B8%EC%A7%80%EC%99%80-%ED%95%A8%EA%BB%98-%EB%B3%B4%EA%B4%80%ED%95%98%EA%B8%B0)
+    - [목록에서 특정 스태시를 가져와서 적용하기](#%EB%AA%A9%EB%A1%9D%EC%97%90%EC%84%9C-%ED%8A%B9%EC%A0%95-%EC%8A%A4%ED%83%9C%EC%8B%9C%EB%A5%BC-%EA%B0%80%EC%A0%B8%EC%99%80%EC%84%9C-%EC%A0%81%EC%9A%A9%ED%95%98%EA%B8%B0)
   - [찾아보기](#%EC%B0%BE%EC%95%84%EB%B3%B4%EA%B8%B0)
-    - [어떤 커밋에서 문자열을 찾고 싶어](#%EC%96%B4%EB%96%A4-%EC%BB%A4%EB%B0%8B%EC%97%90%EC%84%9C-%EB%AC%B8%EC%9E%90%EC%97%B4%EC%9D%84-%EC%B0%BE%EA%B3%A0-%EC%8B%B6%EC%96%B4)
+    - [모든 커밋에서 문자열을 찾고 싶어](#%EB%AA%A8%EB%93%A0-%EC%BB%A4%EB%B0%8B%EC%97%90%EC%84%9C-%EB%AC%B8%EC%9E%90%EC%97%B4%EC%9D%84-%EC%B0%BE%EA%B3%A0-%EC%8B%B6%EC%96%B4)
     - [작성자나 커미터를 찾고 싶어](#%EC%9E%91%EC%84%B1%EC%9E%90%EB%82%98-%EC%BB%A4%EB%AF%B8%ED%84%B0%EB%A5%BC-%EC%B0%BE%EA%B3%A0-%EC%8B%B6%EC%96%B4)
     - [특정 파일이 포함된 커밋을 목록화 하고 싶어](#%ED%8A%B9%EC%A0%95-%ED%8C%8C%EC%9D%BC%EC%9D%B4-%ED%8F%AC%ED%95%A8%EB%90%9C-%EC%BB%A4%EB%B0%8B%EC%9D%84-%EB%AA%A9%EB%A1%9D%ED%99%94-%ED%95%98%EA%B3%A0-%EC%8B%B6%EC%96%B4)
     - [커밋을 참조하는 태그를 찾고 싶어](#%EC%BB%A4%EB%B0%8B%EC%9D%84-%EC%B0%B8%EC%A1%B0%ED%95%98%EB%8A%94-%ED%83%9C%EA%B7%B8%EB%A5%BC-%EC%B0%BE%EA%B3%A0-%EC%8B%B6%EC%96%B4)
@@ -97,20 +101,22 @@
     - [태그 지우기](#%ED%83%9C%EA%B7%B8-%EC%A7%80%EC%9A%B0%EA%B8%B0)
     - [지워진 태그 복구하기](#%EC%A7%80%EC%9B%8C%EC%A7%84-%ED%83%9C%EA%B7%B8-%EB%B3%B5%EA%B5%AC%ED%95%98%EA%B8%B0)
     - [지워진 패치](#%EC%A7%80%EC%9B%8C%EC%A7%84-%ED%8C%A8%EC%B9%98)
-    - [Zip파일로 레파지토리 추출하기](#zip%ED%8C%8C%EC%9D%BC%EB%A1%9C-%EB%A0%88%ED%8C%8C%EC%A7%80%ED%86%A0%EB%A6%AC-%EC%B6%94%EC%B6%9C%ED%95%98%EA%B8%B0)
+    - [Zip파일로 저장소 내보내기](#zip%ED%8C%8C%EC%9D%BC%EB%A1%9C-%EC%A0%80%EC%9E%A5%EC%86%8C-%EB%82%B4%EB%B3%B4%EB%82%B4%EA%B8%B0)
+    - [같은 이름의 브랜치와 태그를 푸시하기](#%EA%B0%99%EC%9D%80-%EC%9D%B4%EB%A6%84%EC%9D%98-%EB%B8%8C%EB%9E%9C%EC%B9%98%EC%99%80-%ED%83%9C%EA%B7%B8%EB%A5%BC-%ED%91%B8%EC%8B%9C%ED%95%98%EA%B8%B0)
   - [파일 추적하기](#%ED%8C%8C%EC%9D%BC-%EC%B6%94%EC%A0%81%ED%95%98%EA%B8%B0)
     - [파일 내용엔 변경이 없이 파일 이름을 앞글자만 대문자로 바꾸고 싶어](#%ED%8C%8C%EC%9D%BC-%EB%82%B4%EC%9A%A9%EC%97%94-%EB%B3%80%EA%B2%BD%EC%9D%B4-%EC%97%86%EC%9D%B4-%ED%8C%8C%EC%9D%BC-%EC%9D%B4%EB%A6%84%EC%9D%84-%EC%95%9E%EA%B8%80%EC%9E%90%EB%A7%8C-%EB%8C%80%EB%AC%B8%EC%9E%90%EB%A1%9C-%EB%B0%94%EA%BE%B8%EA%B3%A0-%EC%8B%B6%EC%96%B4)
-    - [깃 풀 받을때 로컬 파일을 덮어씌우고 싶어](#%EA%B9%83-%ED%92%80-%EB%B0%9B%EC%9D%84%EB%95%8C-%EB%A1%9C%EC%BB%AC-%ED%8C%8C%EC%9D%BC%EC%9D%84-%EB%8D%AE%EC%96%B4%EC%94%8C%EC%9A%B0%EA%B3%A0-%EC%8B%B6%EC%96%B4)
-    - [파일을 로컬에는 보관하고 깃에서 지우고 싶어](#%ED%8C%8C%EC%9D%BC%EC%9D%84-%EB%A1%9C%EC%BB%AC%EC%97%90%EB%8A%94-%EB%B3%B4%EA%B4%80%ED%95%98%EA%B3%A0-%EA%B9%83%EC%97%90%EC%84%9C-%EC%A7%80%EC%9A%B0%EA%B3%A0-%EC%8B%B6%EC%96%B4)
-    - [특정한 버전대로 파일을 복구하고 싶어](#%ED%8A%B9%EC%A0%95%ED%95%9C-%EB%B2%84%EC%A0%84%EB%8C%80%EB%A1%9C-%ED%8C%8C%EC%9D%BC%EC%9D%84-%EB%B3%B5%EA%B5%AC%ED%95%98%EA%B3%A0-%EC%8B%B6%EC%96%B4)
-    - [커밋과 브랜치 간의 특정 파일 변경 이력이 필요해](#%EC%BB%A4%EB%B0%8B%EA%B3%BC-%EB%B8%8C%EB%9E%9C%EC%B9%98-%EA%B0%84%EC%9D%98-%ED%8A%B9%EC%A0%95-%ED%8C%8C%EC%9D%BC-%EB%B3%80%EA%B2%BD-%EC%9D%B4%EB%A0%A5%EC%9D%B4-%ED%95%84%EC%9A%94%ED%95%B4)
+    - [Git 풀 받을때 로컬 파일을 덮어씌우고 싶어](#git-%ED%92%80-%EB%B0%9B%EC%9D%84%EB%95%8C-%EB%A1%9C%EC%BB%AC-%ED%8C%8C%EC%9D%BC%EC%9D%84-%EB%8D%AE%EC%96%B4%EC%94%8C%EC%9A%B0%EA%B3%A0-%EC%8B%B6%EC%96%B4)
+    - [파일을 로컬에는 보관하고 Git에서 지우고 싶어](#%ED%8C%8C%EC%9D%BC%EC%9D%84-%EB%A1%9C%EC%BB%AC%EC%97%90%EB%8A%94-%EB%B3%B4%EA%B4%80%ED%95%98%EA%B3%A0-git%EC%97%90%EC%84%9C-%EC%A7%80%EC%9A%B0%EA%B3%A0-%EC%8B%B6%EC%96%B4)
+    - [특정한 리비전으로 파일을 복구하고 싶어](#%ED%8A%B9%EC%A0%95%ED%95%9C-%EB%A6%AC%EB%B9%84%EC%A0%84%EC%9C%BC%EB%A1%9C-%ED%8C%8C%EC%9D%BC%EC%9D%84-%EB%B3%B5%EA%B5%AC%ED%95%98%EA%B3%A0-%EC%8B%B6%EC%96%B4)
+    - [커밋이나 브랜치 사이에서 특정 파일의 변경 이력이 필요해](#%EC%BB%A4%EB%B0%8B%EC%9D%B4%EB%82%98-%EB%B8%8C%EB%9E%9C%EC%B9%98-%EC%82%AC%EC%9D%B4%EC%97%90%EC%84%9C-%ED%8A%B9%EC%A0%95-%ED%8C%8C%EC%9D%BC%EC%9D%98-%EB%B3%80%EA%B2%BD-%EC%9D%B4%EB%A0%A5%EC%9D%B4-%ED%95%84%EC%9A%94%ED%95%B4)
+    - [특정 파일의 변경점을 Git이 무시하도록 하고 싶어](#%ED%8A%B9%EC%A0%95-%ED%8C%8C%EC%9D%BC%EC%9D%98-%EB%B3%80%EA%B2%BD%EC%A0%90%EC%9D%84-git%EC%9D%B4-%EB%AC%B4%EC%8B%9C%ED%95%98%EB%8F%84%EB%A1%9D-%ED%95%98%EA%B3%A0-%EC%8B%B6%EC%96%B4)
   - [설정](#%EC%84%A4%EC%A0%95)
-    - [깃 명령어 몇 개를 앨리어스 등록하고 싶어](#%EA%B9%83-%EB%AA%85%EB%A0%B9%EC%96%B4-%EB%AA%87-%EA%B0%9C%EB%A5%BC-%EC%95%A8%EB%A6%AC%EC%96%B4%EC%8A%A4-%EB%93%B1%EB%A1%9D%ED%95%98%EA%B3%A0-%EC%8B%B6%EC%96%B4)
-    - [레파지토리에 빈 디렉토리를 추가하고 싶어](#%EB%A0%88%ED%8C%8C%EC%A7%80%ED%86%A0%EB%A6%AC%EC%97%90-%EB%B9%88-%EB%94%94%EB%A0%89%ED%86%A0%EB%A6%AC%EB%A5%BC-%EC%B6%94%EA%B0%80%ED%95%98%EA%B3%A0-%EC%8B%B6%EC%96%B4)
-    - [레파지토리 유저명과 비밀번호를 캐시해두고 싶어](#%EB%A0%88%ED%8C%8C%EC%A7%80%ED%86%A0%EB%A6%AC-%EC%9C%A0%EC%A0%80%EB%AA%85%EA%B3%BC-%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%A5%BC-%EC%BA%90%EC%8B%9C%ED%95%B4%EB%91%90%EA%B3%A0-%EC%8B%B6%EC%96%B4)
-    - [깃이 권한과 파일모드 변경을 무시하게 만들고 싶어](#%EA%B9%83%EC%9D%B4-%EA%B6%8C%ED%95%9C%EA%B3%BC-%ED%8C%8C%EC%9D%BC%EB%AA%A8%EB%93%9C-%EB%B3%80%EA%B2%BD%EC%9D%84-%EB%AC%B4%EC%8B%9C%ED%95%98%EA%B2%8C-%EB%A7%8C%EB%93%A4%EA%B3%A0-%EC%8B%B6%EC%96%B4)
-    - [글로벌 유저로 설정해두고 싶어](#%EA%B8%80%EB%A1%9C%EB%B2%8C-%EC%9C%A0%EC%A0%80%EB%A1%9C-%EC%84%A4%EC%A0%95%ED%95%B4%EB%91%90%EA%B3%A0-%EC%8B%B6%EC%96%B4)
-    - [깃에 명령어 색상을을 넣고 싶어](#%EA%B9%83%EC%97%90-%EB%AA%85%EB%A0%B9%EC%96%B4-%EC%83%89%EC%83%81%EC%9D%84%EC%9D%84-%EB%84%A3%EA%B3%A0-%EC%8B%B6%EC%96%B4)
+    - [Git 명령어 몇 개를 앨리어스 등록하고 싶어](#git-%EB%AA%85%EB%A0%B9%EC%96%B4-%EB%AA%87-%EA%B0%9C%EB%A5%BC-%EC%95%A8%EB%A6%AC%EC%96%B4%EC%8A%A4-%EB%93%B1%EB%A1%9D%ED%95%98%EA%B3%A0-%EC%8B%B6%EC%96%B4)
+    - [저장소에 빈 디렉토리를 추가하고 싶어](#%EC%A0%80%EC%9E%A5%EC%86%8C%EC%97%90-%EB%B9%88-%EB%94%94%EB%A0%89%ED%86%A0%EB%A6%AC%EB%A5%BC-%EC%B6%94%EA%B0%80%ED%95%98%EA%B3%A0-%EC%8B%B6%EC%96%B4)
+    - [저장소 유저명과 비밀번호를 캐시해두고 싶어](#%EC%A0%80%EC%9E%A5%EC%86%8C-%EC%9C%A0%EC%A0%80%EB%AA%85%EA%B3%BC-%EB%B9%84%EB%B0%80%EB%B2%88%ED%98%B8%EB%A5%BC-%EC%BA%90%EC%8B%9C%ED%95%B4%EB%91%90%EA%B3%A0-%EC%8B%B6%EC%96%B4)
+    - [Git이 권한과 파일모드 변경을 무시하게 만들고 싶어](#git%EC%9D%B4-%EA%B6%8C%ED%95%9C%EA%B3%BC-%ED%8C%8C%EC%9D%BC%EB%AA%A8%EB%93%9C-%EB%B3%80%EA%B2%BD%EC%9D%84-%EB%AC%B4%EC%8B%9C%ED%95%98%EA%B2%8C-%EB%A7%8C%EB%93%A4%EA%B3%A0-%EC%8B%B6%EC%96%B4)
+    - [글로벌 유저를 설정해두고 싶어](#%EA%B8%80%EB%A1%9C%EB%B2%8C-%EC%9C%A0%EC%A0%80%EB%A5%BC-%EC%84%A4%EC%A0%95%ED%95%B4%EB%91%90%EA%B3%A0-%EC%8B%B6%EC%96%B4)
+    - [Git에 명령줄 색상을 넣고 싶어](#git%EC%97%90-%EB%AA%85%EB%A0%B9%EC%A4%84-%EC%83%89%EC%83%81%EC%9D%84-%EB%84%A3%EA%B3%A0-%EC%8B%B6%EC%96%B4)
   - [뭘 잘못했는지 모르겠어](#%EB%AD%98-%EC%9E%98%EB%AA%BB%ED%96%88%EB%8A%94%EC%A7%80-%EB%AA%A8%EB%A5%B4%EA%B2%A0%EC%96%B4)
 - [다른 리소스](#%EB%8B%A4%EB%A5%B8-%EB%A6%AC%EC%86%8C%EC%8A%A4)
   - [도서](#%EB%8F%84%EC%84%9C)
@@ -120,29 +126,27 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## 레파지토리
+## 저장소
 
-### 로컬 레파지토리에서 시작하고 싶어
+### 로컬 저장소를 새로 만들고 싶어
 
-이미 존재하는 프로젝트 디렉토리를 깃 레파지토리로 최적화해 쓰려면:
+이미 존재하는 디렉토리를 Git 저장소로 초기화 하려면:
 
 ```sh
 (my-folder) $ git init
 ```
 
-### 난 리모트 레파지토리를 복제해오고 싶어
+### 원격 저장소를 복제해 오고 싶어
 
-리모트 레파지토리를 클론하려면, 레파지토리 URL을 복사해와서 실행해요.
+원격 저장소를 복제(복사)하려면, 저장소 url을 복사해서 다음 명령을 실행하세요.
 
 ```sh
 $ git clone [url]
 ```
 
-폴더 이름이 리모트 레파지토리 이름과 같이 저장될 거에요. 
+이렇게 하면 원격 저장소의 이름과 같은 폴더를 새로 만들고 그 안에 원격 저장소를 저장할 거에요. 복제해 올 원격 서버와 연결되어 있는지 확인하세요. (대부분의 경우 인터넷에 연결되어 있는지 확인하라는 뜻이에요.)
 
-복제할 리모트 서버의 연결을 확인하세요.(대부분 인터넷 연결을 확인하란 뜻이에요)
-
-다른 레파지토리 이름으로 복제를 해오고 싶다면
+원격 저장소의 이름과 다른 폴더로 복제하고 싶다면 다음 명령어를 실행하세요.
 
 ```sh
 $ git clone [url] name-of-new-folder
@@ -151,11 +155,9 @@ $ git clone [url] name-of-new-folder
 ## 커밋 수정
 
 <a name="diff-last"></a>
-<!-- ### What did I just commit? -->
-
 ### 내가 방금 어떤 커밋을 남겼지?
 
-`git commit -a` 로 막 커밋을 남기고 내가 뭐라고 안에 적었더라? 한다고 하고. 최근의 커밋을 현재 HEAD에서 볼 수 있어요.
+조금 전에 별 생각없이 `git commit -a` 명령으로 변경점을 커밋했는데, 뭘 커밋했는지 까물까물 하다고 해 봅시다. 현재 HEAD에서 가장 최근의 커밋 내용을 보려면 이렇게 해 보세요.
 
 ```sh
 (master)$ git show
@@ -167,7 +169,7 @@ $ git clone [url] name-of-new-folder
 $ git log -n1 -p
 ```
 
-만약 특정 커밋의 파일을 보고 싶다면, 이렇게 할 수도 있어요. (commitID는 바로 당신이 관심있는 그 commit이에요)
+만약 특정 커밋에 들어있는 특정 파일을 보고 싶다면, 이렇게 할 수도 있어요. (`<commitID>`는 관심을 갖고 있는 그 커밋이에요.)
 
 ```sh
 $ git show <commitid>:filename
@@ -175,22 +177,21 @@ $ git show <commitid>:filename
 
 ### 커밋 메세지를 잘못 썼어
 
-만약 메시지를 잘못 썼고 아직 푸시를 안했다면, 커밋 메시지 바꾸기를 따라해 볼 수 있어요.
+만약 커밋 메시지를 잘못 썼지만 아직 푸시하지는 않았다면, 다음 명령어로 변경점은 그대로 두고 커밋 메시지만 고칠 수 있어요.
 
 ```sh
 $ git commit --amend --only
 ```
-
-이 방법은 편집 가능한 기본 텍스트 에디터가 열릴텐데요, 다른 방법으론 한줄에 쓸 수도 있어요.
+이 명령어를 사용하면 기본 텍스트 편집기가 열리고 커밋 메시지를 고칠 수 있어요. 다른 방법으로, 한 큐에 처리할 수도 있지요.
 
 ```sh
 $ git commit --amend --only -m 'xxxxxxx'
 ```
 
-만약 푸시를 이미 했다면, 커밋을 수정해서 강제 푸시를 할 수 있긴한대 별로 추천하진 않아요.
+이미 푸시했다면, 커밋을 고친 뒤 강제 푸시를 할 수 있기는 한데, 별로 추천하진 않아요.
 
 <a name="commit-wrong-author"></a>
-### 커밋을 다른 이름과 이메일 설정으로 해버렸어
+### 커밋을 다른 이름과 이메일 설정으로 해 버렸어
 
 하나의 커밋이라면 이렇게 수정해요.
 
@@ -198,7 +199,7 @@ $ git commit --amend --only -m 'xxxxxxx'
 $ git commit --amend --no-edit --author "New Authorname <authoremail@mydomain.com>"
 ```
 
-대안으로는 `git config --global author.(name|email)`에서 설정을 다시 맞춘 다음  
+다른 방법으로는, `git config --global author.(name|email)` 명령으로 저자 설정을 정확하게 다시 한 다음  
 
 ```sh
 $ git commit --amend --reset-author --no-edit
@@ -216,19 +217,19 @@ $ git add myfile
 $ git commit --amend --no-edit
 ```
 
-그 파일이 새롭게 커밋으로 추가됐고 그 파일만 지우고 (git 에서만) 싶은 경우엔,
+그 파일이 새롭게 커밋으로 추가됐고 그 파일을 (단지 Git에서) 지우고 싶은 경우엔,
 
 ```sh
 $ git rm --cached myfile
 $ git commit --amend --no-edit
 ```
 
-이 방법은 열린 패치가 있고 불필요한 파일을 커밋 했거나 리모트에 강제 푸시로 패치를 업데이트 해야할때 특히 유용해요. `--no-edit` 옵션은 기존 커밋 메세지를 유지하는데 사용돼요.
+특히나 이 방법은, 작업중인 패치가 있는데 불필요한 파일을 커밋 해서, 강제 푸시로 원격 저장소의 패치를 업데이트 해야 할 때 특히 유용해요. `--no-edit` 옵션은 기존 커밋 메세지를 유지하는데 사용하구요.
 
 <a name="delete-pushed-commit"></a>
 ### 마지막 커밋을 지우고 싶어
 
-푸시된 커밋을 지우고 싶다면 이걸 따라하면 되는데, 이력을 돌이킬 수 없게 되고 레파지토리에서 이미 풀을 받아간 다른 사람의 이력도 엉망이 되요. 간단히 말하자면, 잘 모르겠으면 절대 하지마요.
+푸시된 커밋을 지우고 싶다면 이걸 따라하면 되는데, 커밋 이력을 되돌릴 수 없는 방법으로 엎어버리며, 또 저장소에서 이미 풀을 받아간 다른 사람의 커밋 이력도 엉망으로 만들 거에요. 간단히 말하자면, 잘 모르겠으면 절대 하지 마세요.
 
 ```sh
 $ git reset HEAD^ --hard
@@ -241,21 +242,21 @@ $ git push --force-with-lease [remote] [branch]
 (my-branch*)$ git reset --soft HEAD@{1}
 ```
 
-이 방법은 푸시를 안 했을 때만 동작해요. 푸시를 했으면, 안전한 방법은 `git revert SHAofBadCommit` 한가지 밖이에요. 
-이 방법은 모든 지난 커밋 변경점으로 되돌아간 새 커밋을 만들 거에요. 또는, 만약 푸시한 브랜치가 리베이스에 안전하다면 (만약 다른 사람이 풀 받지 않는다면), `git push --force-with-lease` 명령어를 쓸수 있어요. 
+이 방법은 푸시를 안 했을 때만 동작해요. 이미 푸시를 했으면, 오롯이 안전한 방법은 `git revert SHAofBadCommit` 한가지 뿐이에요. 
+이 방법은 모든 지난 커밋에서 바뀐 점을 거꾸로 되돌리는 새 커밋을 만들 거에요. 또는, 만약 푸시한 브랜치가 리베이스에 안전하다면 (즉 다른 개발자가 거기에서 풀 받지 않는다면), `git push --force-with-lease` 명령어를 쓸 수도 있어요. 
 더 알고 싶다면, [이 섹션](#deleteremove-last-pushed-commit)을 참고해주세요.
 
 <a name="delete-any-commit"></a>
-### 임의적인 커밋 지우기
+### 임의의 커밋 지우기
 
-이전과 동일한 경고에요. 가능한 이 방법은 쓰지 마세요.
+위 섹션의 경고가 똑같이 적용돼요. 가능하면 이 방법은 절대 쓰지 마세요.
 
 ```sh
 $ git rebase --onto SHA1_OF_BAD_COMMIT^ SHA1_OF_BAD_COMMIT
 $ git push --force-with-lease [remote] [branch]
 ```
 
-아니면 [대화형 리베이스](#interactive-rebase)를 쓰고 지우고 싶은 커밋 라인을 지워도 돼요.
+아니면 [대화형 리베이스](#interactive-rebase)를 쓰고, 지우고 싶은 커밋에 해당하는 줄을 지워도 돼요.
 
 <a name="#force-push"></a>
 ### 수정된 커밋을 푸시했는데, 에러 메세지가 떠
@@ -270,91 +271,123 @@ hint: 'git pull ...') before pushing again.
 hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 ```
 
-알아두세요, 리베이스(아래를 보세요)나 어멘드는 **기존 커밋을 새걸로 바꿔요**,
-그래서 이미 먼저 수정된 커밋이 푸시됐다면 강제 푸시를 해야 해요.
-이 방법을 쓸땐 조심하세요; *항상* 작업되는 브랜치가 맞나 확인해요!
+수정된 커밋은, 리베이스(아래를 보세요) 처럼 **기존 커밋을 새걸로 바꾼다는 점**을 항상 생각하세요. 따라서 수정되기 전의 커밋을 이미 원격 저장소로 푸시했다면, 변경된 내용은 강제로 푸시(`--force-with-lease`)해야 해요. 이 작업을 할 때에는 *항상* 브랜치 이름을 정확하게 입력했는지 확인하세요!
 
 ```sh
 (my-branch)$ git push origin mybranch --force-with-lease
 ```
 
-일반적으로 강제 푸시를 쓰지 마세요.
-새 커밋을 만들어서 푸시하는게 수정된 커밋을 강제로 푸시하는 것보다 훨씬 나아요. 그런 수정된 커밋은 그 브랜치나 다른 자식 브랜치를 쓰는 다른 개발자의 소스 이력과 충돌의 원인이 될거에요. 
-`--force-with-lease` 는 여전히 실패할텐데, 누군가가 같은 브랜치를 쓴다면 변경점을 덮어쓰는 푸시를 할 수도 있어요.
+일반적으로 **강제 푸시를 쓰지 마세요**. 수정된 커밋을 강제로 푸시하면, 문제의 그 브랜치에서 무언가 작업을 하는 다른 개발자의 소스 이력이나, 그 브랜치에서 따낸 새끼 브랜치에서 충돌을 낼 수도 있어요. 따라서 그냥 새 커밋을 만들어서 푸시하는게 최선이에요. 같은 브랜치에서 다른 사람이 이미 어떤 작업을 했는데, 당신이 올리려는 푸시가 그 다른 사람의 변경점을 덮어쓰는 경우에도 `--force-with-lease` 는 계속 실패할 거에요.
 
-절대로 아무도 같은 브랜치를 안 쓰거나, 절대로 브랜치에 업데이트를 해야할때 `--force` (`-f`) 옵션을 쓸 수 있지만 일반적으론 피하는게 좋아요.
+만약 다른 사람이 같은 브랜치에서 작업하지 않는다고 *확신하거나*, 브랜치 선두를 *다른 조건 안 따지고* 바꾸고 싶다면, `--force` (`-f`) 옵션을 쓸 수 있어요. 근데 가능한 하지 마세요.
 
 <a href="undo-git-reset-hard"></a>
-### 하드 리셋을 해버렸는데 되돌리고 싶어
+### 실수로 하드 리셋을 했는데, 작업하던걸 되살리고 싶어
 
-만약 하드 리셋을 했다고 해도 커밋을 돌릴 순 있어요. 깃은 며칠간은 로그를 가지고 있거든요. 
+실수로 `git reset --hard`를 했다고 해도, git은 며칠간은 로그를 보존하고 있으니까, 보통은 그 커밋을 되살릴 수 있어요.
 
-알아두기 : 이건 커밋을 남겼거나 스테이시같이 백업을 했을 때만 유효해요. `git reset --hard` 은 커밋되지 않은 수정사항을 _다 지울 거에요_, 그러니 조심해서 써야해요. (안전한 방법으론 `git reset --keep` 이 있어요)
+참고: 이건 커밋을 남겼거나 스태시에 저장하는 등, 작업 이력을 백업했을 때에만 유효해요. `git reset --hard` 은 커밋되지 않은 수정사항을 _다 지울 거에요_, 그러니 조심해서 써야해요. (쓰기에는 `git reset --keep` 이 조금 더 안전해요.)
 
 ```sh
 (master)$ git reflog
 ```
 
-지난 커밋과 리셋을 위한 커밋을 볼 수 있을 거에요. 돌아가고 싶은 커밋의 SHA 코드를 골라서, 리셋을 해요:   
+지난 커밋과 리셋을 위한 커밋을 볼 수 있을 거에요. 돌아가고 싶은 커밋의 SHA 해시를 골라서, 다시 리셋해요:   
 
 ```sh
 (master)$ git reset --hard SHA1234
 ```
 
-계속 할 수 있을거에요.
+이제 다시 작업을 시작할 수 있을 거에요.
 
 <a href="undo-a-commit-merge"></a>
-### 머지를 실수로 커밋, 푸시해버렸어
+### 실수로 머지를 커밋하고 푸시해 버렸어
 
-만약 실수로 머지할 준비가 안된 피쳐 브랜치를 메인 브랜치에 머지했어도 되돌릴 순 있어요.
+만약 실수로 병합할 준비가 덜 된 피쳐 브랜치를 메인 개발 브랜치에 병합했어도 되돌릴 순 있어요.
 하지만 문제는 있어요: 머지 커밋은 한개 이상의 부모(보통은 두 개)를 가지게 돼요.
  
-사용하려면
+다음 명령어를 사용하세요
 
 ```sh
 (feature-branch)$ git revert -m 1 <commit>
 ```
 
-여기서 -m 1 옵션은 부모 번호 1(머지가 만들어진 브랜치)을 되돌릴 상위 항목으로 선택하라고 해요. 
+여기서 -m 1 옵션은 부모 번호 1(머지가 만들어진 브랜치)을 되돌릴 상위 항목으로 선택하라는 뜻이에요.
 
-알아두기 : 부모 번호는 커밋 식별자가 아니고, 오히려 머지된 커밋이 `Merge: 8e2ce2d 86ac2e7` 이라는 라인을 가지고 있어요.
-부모 번호는 이 라인에서 원하는 부모의 1 기반 인덱스이고, 첫번째 식별자는 1, 다음은 2 이렇게 이어져요.
+참고: 부모 번호는 커밋 식별자가 아니에요. 단지, 머지된 커밋은 `Merge: 8e2ce2d 86ac2e7` 이라는 라인을 가지고 있어요. 부모 번호는 이 라인에서 선택하려는 부모의 인덱스에요. 1부터 시작하는 인덱스니까, 첫번째 식별자는 1, 다음은 2 이렇게 이어져요.
+
+<a href="undo-sensitive-commit-push"></a>
+### 실수로 공개되면 안 되는 자료를 담은 파일을 커밋하고 푸시했어
+
+만약 공개되면 안 되는 민감한 데이터(비밀번호나 배포용 키 같은거)를 포함한 파일을 푸시했다면, 이전 커밋을 수정하세요. 여하튼 파일이 이미 푸시되었다면, 그 파일 안에 저장되어 있던 데이터는 이미 노출된 것이라고 간주하세요. 다음 절차를 따르면 민감한 데이터를 공개 저장소나 로컬 사본에서는 지울 수 있지만, 다른 사람이 이미 풀 해서 가져간 사본에서는 **삭제할 수 없어요**. 비밀번호를 커밋했다면, **당장 바꾸세요**. 배포용 키를 커밋했다면 **당장 다시 생성하세요**. 민감한 정보를 포함하는 원래 커밋은 아무나 풀로 가져갈 수 있기 때문에, 커밋을 수정하는 것은 땜빵 조치일 뿐이에요.
+
+파일을 수정해서 민감한 데이터를 삭제했다면, 다음을 실행하세요
+```sh
+(feature-branch)$ git add edited_file
+(feature-branch)$ git commit --amend --no-edit
+(feature-branch)$ git push --force-with-lease origin [branch]
+```
+
+파일을 통째로 지우고 싶다면(물론 로컬에서는 남겨두고), 다음을 실행하세요
+```sh
+(feature-branch)$ git rm --cached sensitive_file
+echo sensitive_file >> .gitignore
+(feature-branch)$ git add .gitignore
+(feature-branch)$ git commit --amend --no-edit
+(feature-branch)$ git push --force-with-lease origin [branch]
+```
+다른 방법으로는 민감한 데이터를 로컬 환경 변수에 저장할 수도 있어요.
+
+파일을 통째로 지우고 싶다면(로컬에서도), 다음을 실행하세요
+```sh
+(feature-branch)$ git rm sensitive_file
+(feature-branch)$ git commit --amend --no-edit
+(feature-branch)$ git push --force-with-lease origin [branch]
+```
+
+작업 도중에 다른 커밋을 만들고서야 민감한 데이터가 있다는 것을 깨달았다면 (즉, 민감한 데이터가 몇 개의 커밋 이전에 커밋되었다면), 리베이스를 해야돼요.
 
 ## 스테이지
 
 <a href="#i-need-to-add-staged-changes-to-the-previous-commit"></a>
-### 지난 커밋에 스테이지 변경점을 추가하고 싶어
+### 스테이지의 변경점을 이전 커밋에 추가하고 싶어
 
 ```sh
 (my-branch*)$ git commit --amend
 ```
 
-<a name="commit-partial-new-file"></a>
-### 전체가 아닌 새 파일만 스테이지에 올리고 싶어
+커밋 메시지를 변경할 필요가 없다면, git에 커밋 메시지를 재활용 하도록 명령하세요.
 
-보통은 부분적으로 파일을 스테이지하려면 이렇게 해요: 
+```sh
+(my-branch*)$ git commit --amend -C HEAD
+```
+
+<a name="commit-partial-new-file"></a>
+### 새 파일 중 전체가 아닌 일부분만 스테이지 하고 싶어.
+
+파일의 일부분만 스테이지 하려면, 보통은 이렇게 해요:
 
 ```sh
 $ git add --patch filename.x
 ```
 
-`-p`는 축약된 옵션이에요. 이 방식은 대화형 모드를 열텐데요. `s` 옵션을 쓰면 커밋을 나눌 수 있어요. 하지만 새 파일이라면 그런 옵션이 없을거에요. 새 파일을 추가하려면:
+축약된 옵션인 `-p`를 써도 돼요. 이 방식은 대화형 모드를 열텐데요. `s` 옵션을 쓰면 커밋을 나눌 수 있어요. 하지만 새 파일이라면 그런 옵션이 없을거에요. 새 파일을 추가하려면 이렇게 하세요:
 
 ```sh
 $ git add -N filename.x
 ```
 
-그 다음 임의적으로 라인들을 골라 추가해주려면 `e`옵션이 필요할거에요. `git diff --cached`나 `git diff --staged`는 로컬에 저장된 부분과 스테이지에 있는 라인들을 비교해서 보여줄 거에요.
+그 다음, `e` 옵션을 써서 수동으로 추가할 라인을 정할 수 있어요. `git diff --cached`나 `git diff --staged`를 쓰면 로컬에 저장된 부분과 스테이지에 있는 라인들을 비교해서 보여줄 거에요.
 
 <a href="stage-in-two-commits"></a>
 ### 하나의 파일 변경점을 두개의 다른 커밋에 남기고 싶어
 
-`git add`는 전체 파일들을 커밋에 추가해요. `git add -p`는 대화형으로 추가하고픈 변경점들을 고를 수 있어요.
+`git add`는 전체 파일들을 커밋에 추가해요. `git add -p`는 추가하려는 변경점을 대화형으로 고를 수 있어요.
 
 <a href="unstaging-edits-and-staging-the-unstaged"></a>
-### 아직 스테이지에 안 올라간 변경점을 스테이지에 추가하고, 스테이지에 있는 변경점을 다시 빼고 싶어
+### 아직 스테이지에 안 올라간 변경점을 스테이지에 추가하고, 스테이지에 있는 변경점은 다시 빼고 싶어
 
-이건 좀 꼼수인데요, 스테이지 전인 파일들을 스테이시해서 빼두고선 리셋 할 수 있을거에요. 그 다음 스테이시를 다시 불러와 추가를 해요. 
+이건 좀 꼼수인데요, 제가 발견한 방법은 일단 스테이지 전인 파일들을 스태시에 보관하세요. 그 다음, 리셋해요. 다음, 스태시에 보관한 변경점을 불러오고 스테이지에 추가하세요.
 
 ```sh
 $ git stash -k
@@ -373,7 +406,7 @@ $ git checkout -b my-branch
 ```
 
 <a href="move-unstaged-edits-to-old-branch"></a>
-### 스테이지전 변경점을 만들어둔 다른 브랜치로 옮기고 싶어
+### 스테이지 전의 변경점을 이미 존재하는 다른 브랜치로 옮기고 싶어
 
 ```sh
 $ git stash
@@ -392,46 +425,47 @@ $ git stash pop
 (master)$ git checkout -f
 ```
 
-이 방법은 `git add`로 스테이징된 모든 파일이 빠지게 돼요. 
+다음 방법은 `git add`로 스테이징된 모든 파일을 스테이지에서 빼버릴 거에요.
 
 ```sh
 $ git reset
 ```
 
-이 방법은 커밋되지 않은 모든 로컬 변경점이 되돌려 져요. (레파지토리 최상단 루트에서 실행해야 할거에요)
+다음 방법은 커밋되지 않은 모든 로컬 변경사항을 되돌릴 거에요. (저장소 최상단 루트에서 실행해야 돼요.)
 
 ```sh
 $ git checkout .
 ```
 
-또 커밋되지 않은 변경점들 중 몇가지 파일이나 디렉토리만 되돌릴 수 있어요.
+또 커밋되지 않은 변경점들 중 특정 파일이나 디렉토리만 되돌릴 수 있어요.
 
 ```sh
 $ git checkout [some_dir|file.txt]
 ```
 
-거기에 또 다른 되돌리는 방법으로 (타이핑 칠게 많지만 어떤 하위 디렉토리에서도 돼요):
+모든 커밋되지 않은 변경점을 되돌리는 다른 방법도 있어요 (타이핑 칠게 많지만 어떤 하위 디렉토리에서도 돼요):
 
 ```sh
 $ git reset --hard HEAD
 ```
 
-이 방법은 모든 트래킹되지 않은 파일들을 지워요, 그래서 깃에서 트래킹되는 파일들만 남아요:
+이 방법은 추적하지 않은 파일들을 모두 지워요, 그래서 Git에서 추적하는 파일들만 남아요:
 
 ```sh
 $ git clean -fd
 ```
 
-`-x` 옵 또한 무시된 파일들을 다 지워요.
+`-x` 옵션을 주면 무시된 파일들까지 다 지워요.
 
-### 스테이지 안된 특정 변경점을 지우고 싶어
+### 스테이지 안된 특정 변경 사항을 지우고 싶어
 
-작업중인 영역에서 전체가 아닌 특정 부분을 지우고 싶을때
-원치않는 변경점을 확인하고, 변경점을 잘 보관하세요.
+작업 사본에서 전체가 아닌 일부 변경 사항만 제거하고 싶은 때에요.
+
+원치않는 변경점은 체크아웃하고, 제대로 된 변경 사항은 유지하세요.
 
 ```sh
 $ git checkout -p
-# 날리고 싶은 사항에 y를 적으세요 
+# 날리고 싶은 변경 사항에 y를 적으세요 
 ```
 
 또다른 전략은 `stash`을 같이 쓰는거에요. 챙겨야 하는 변경점을 스테이시 하고, 작업 중인 영역을 리셋하고, 다시 올바른 변경점으로 재적용해요.   
@@ -474,13 +508,24 @@ $ git checkout .
 ```
 
 <a href="i-want-to-discard-all-my-untracked-files"></a>
-### 트래킹 안된 파일들 다 지우고 싶어
+### 추적되지 않는 파일들 다 지우고 싶어
 
-트래킹 안된 파일들 다 지우고 싶을 땐 
+추적되지 않는 파일들 다 지우고 싶을 땐 
 
 ```sh
 $ git clean -f
 ```
+
+<a href="I-want-to-unstage-specific-staged-file"></a>
+### 스테이지된 파일 중 일부를 빼 버리고 싶어
+
+때때로 지금까지 커밋된 적이 없는 파일이 실수로 스테이지 되는 경우가 있습니다. 이걸 스테이지에서 빼려면
+
+```sh
+$ git reset -- <filename>
+```
+
+결과적으로 이 파일은 스테이지에서 빠지고, 추적되지 않는 것처럼 보일 거에요.
 
 ## 브랜치
 
@@ -492,13 +537,13 @@ $ git clean -f
 $ git branch
 ```
 
-리모트 브랜치 다 보기  
+원격 브랜치 다 보기  
 
 ```sh
 $ git branch -r
 ```
 
-로컬과 리모트 브랜치 모두 보기
+로컬과 원격 브랜치 모두 보기
 
 ```sh
 $ git branch -a
@@ -545,7 +590,7 @@ $ git reset --hard c5bc55a
 #
 ```
 
-오리진(리모트과 같은 상태의)로 맞추는 리셋을 하는 방법 중 하나는:
+리셋해서 오리진의 상태와 맞추는 (원격 저장소와 같은 내용물을 갖도록 하는) 방법 중 하나는 이렇게 하면 됩니다:
 
 ```sh
 (master)$ git reset --hard origin/my-branch
@@ -571,7 +616,7 @@ $ git reset --hard c5bc55a
 
 알아두세요 `HEAD^2`는 `HEAD~2`과 같은게 아니에요. (더 자세한 정보는 [이 링크](http://www.paulboxley.com/blog/2011/06/git-caret-and-tilde)를 참고해요 )
 
-대안으로, `HEAD^`를 쓰고 싶지 않다면, 마스터 브랜치로 옮길 커밋 해시를 알아둬요 (`git log`가 트릭을 부릴 거에요) 그리고 그 해쉬로 리셋을 해요. `git push`가 리모트랑 변경점이 똑같은걸 확인해줄거에요.
+다른 방법으로, `HEAD^`를 쓰고 싶지 않다면, 마스터 브랜치로 옮길 커밋 해시를 알아둬요 (`git log`가 재주를 부릴 거에요) 그리고 그 해쉬로 리셋을 해요. `git push`가 원격 저장소에 변경점이 반영되었는지 확인해 줄 겁니다.
 
 예를 들자면, 그 마스터의 커밋의 해쉬가 `a13b85e`라면:
 
@@ -589,26 +634,26 @@ HEAD is now at a13b85e
 <a name="keep-whole-file"></a>
 ### 다른 레퍼런스 같은 곳에서 모든 파일을 유지하고 싶어 
 
-수백번의 변경점을 가진 스파이크(아래 알아두기 참고) 작업을 한다고 가정해보죠. 모든 건 동작하고 있고,그 작업을 저장해두기 위해  다른 브랜치로 커밋을 해요:
+스파이크(아래 알아두기 참고) 작업을 하고 있고, 변경점이 수백 개는 나왔다고 가정해보죠. 모든게 제대로 굴러가요. 이제 새 브랜치를 하나 따서 작업을 저장해 두기로 해요.
 
 ```sh
 (solution)$ git add -A && git commit -m "Adding all changes from this spike into one big commit."
 ```
 
-그 커밋을 브랜치(아마 feature일수도 있고, `develop` 일수도 있겠죠)에 넣고 싶을 때, 모든 파일을 지키는데 관심이 있을거에요. 큰 커밋을 작게 나누고 싶을거에요.
+스파이크 커밋을 브랜치(아마 기능 브랜치일 수도 있고, `develop` 일 수도 있겠죠)로 옮겨 넣는다고 하면, 모든 파일을 유지하고 싶을 거에요. 큰 커밋을 작게 나누고 싶을거에요.
 
 현재 가지고 있는건:
 
-* 스파이크를 위한 솔루션과 함께인 `solution` 브랜치. `develop` 브랜치의 1단계 앞선 상태.
-* 변경점을 추가하고 싶은 `develop` 브랜치
+  * `solution` 브랜치. 스파이크 솔루션을 보관하고 있고, `develop` 브랜치보다 하나 앞선 상태.
+  * `develop` 브랜치. 변경점을 추가하려는 곳.
 
-브랜치로 내용들을 불러오는 것으로 해결할 수 있어요:
+스파이크 솔루션의 내용을 브랜치로 가져오는 것으로 해결할 수 있어요:
 
 ```sh
 (develop)$ git checkout solution -- file1.txt
 ```
 
-`develop`브랜치에서 `solution` 브랜치의 저 파일의 내용들을 얻을 수 있어요.
+이렇게 하면 저 파일의 내용을 `solution` 브랜치에서 현재 작업중인 `develop` 브랜치로 가져올 수 있어요.
 
 ```sh
 # On branch develop
@@ -621,7 +666,7 @@ HEAD is now at a13b85e
 
 그 다음, 평소처럼 커밋해요.
 
-알아두기 : 스파이크 솔루션은 문제를 분석하거나 풀기위해 만들어졌어요. 이 솔루션들은 모두가 문제의 확실한 시각화를 얻고선 평가되고 제거돼요.~ [위키피디아](https://en.wikipedia.org/wiki/Extreme_programming_practices).   
+알아두기 : 스파이크 솔루션은 문제를 분석고 해결하려고 만드는 것이에요. 이 솔루션은 문제를 예측하기 위해 사용하고, 관련된 모두가 문제를 확실히 인지하고 나면 스파이크 솔루션은 폐기돼요. ~ [위키피디아](https://en.wikipedia.org/wiki/Extreme_programming_practices).   
 
 <a name="cherry-pick"></a>
 ### 한 브랜치에 다른 브랜치에 남겼어야 하는 커밋을 여러개 남겼어
@@ -666,14 +711,13 @@ HEAD is now at a13b85e
 (21)$
 ```
 
-그리고 21번 버그 커밋을 *체리픽* 해서 브랜치 최상단에 올려요. 그 커밋을 적용할건데, 오직 그 커밋만을 헤드에 뭐가 있든 최상단으로 적용할거란 의미에요.
+그리고 21번 버그 커밋을 *체리픽* 해서 브랜치 최상단에 올려요. 체리픽은 오롯이 그 커밋의 변경점을 지금 헤드에 막바로 적용한다는 뜻이에요.
 
 ```sh
 (21)$ git cherry-pick e3851e8
 ```
 
-이 지점에서 충돌이 있을 수도 있어요.
-어떻게 충돌을 해결할지 [대화형 리베이스 섹션](#interactive-rebase) 안에 있는 [**충돌이 있어**](#merge-conflict) 부분을 참고하세요.  
+이 지점에서 충돌이 있을 수도 있어요. 어떻게 충돌을 해결할지 [대화형 리베이스 섹션](#interactive-rebase) 안에 있는 [**충돌이 있어**](#merge-conflict) 부분을 참고하세요.  
 
 자 이제 14번 버그 작업을 위해 마스터로 가서 새 브랜치를 만들어요.
 
@@ -692,19 +736,18 @@ HEAD is now at a13b85e
 <a name="delete-stale-local-branches"></a>
 ### 업스트림에선 지워진 로컬 브랜치를 지우고 싶어
 
-깃헙에 풀리퀘스트로 머지를 하면, 포크 뜬 머지 브랜치를 지울껀지 선택할 수 있는 옵션을 줘요.
-해당 브랜치에 계속 작업할 예정이 없다면, 다량의 오래된 브랜치들로 뒤덮이지 않게 로컬 작업을 지워주는게 더 깔끔해요.
+깃헙에서 풀 리퀘스트를 병합하면, 포크로 가져온 병합 브랜치를 지울지 선택할 수 있어요. 해당 브랜치에 계속 작업할 계획이 없다면, 로컬 사본에서 병합된 브랜치를 삭제해 주어야 작업 사본이 오래된 브랜치로 엉망이 되지 않아 깔끔해요.
 
 ```sh
 $ git fetch -p upstream
 ```
 
-여기서, `upstream`은 패치로 가져오려는 리모트 레파지토리에요.
+여기서, `upstream`은 페치로 가져오려는 원격 저장소에요.
 
 <a name='restore-a-deleted-branch'></a>
-### 브랜치를 지워버렸어
+### 실수로 브랜치를 지워버렸어
 
-주기적으로 리모트으로 푸시한다면, 대부분은 안전해야 해요. 그치만 가끔은 브랜치를 지울 수 있어요. 새 브랜치를 만들고 파일을 하나 만들었다고 해보죠:
+주기적으로 원격 저장소에 푸시한다면, 거의 대부분의 경우 별 문제 없을 거에요. 하지만 여전히 브랜치를 날려먹을 가능성은 있어요. 새 브랜치를 만들고 파일을 하나 만들었다고 해보죠:
 
 ```sh
 (master)$ git checkout -b my-branch
@@ -749,7 +792,7 @@ Deleted branch my-branch (was 4e3cd85).
 oh noes, deleted my branch!
 ```
 
-여기에서 업그레이드된 로그 도구인 '리플로그'에 익숙해져야 해요. 리플로그는 레파지토리의 모든 행동의 이력을 다 보관해요.
+여기에서 업그레이드된 로그 도구인 'reflog'에 익숙해져야 해요. reflog는 저장소에서 발생한 모든 작업의 이력을 보관해요.
 
 ```
 (master)$ git reflog
@@ -773,7 +816,7 @@ README.md foo.txt
 
 ### 브랜치를 지우고 싶어
 
-리모트 브랜치를 삭제하려면:
+원격 브랜치를 삭제하려면:
 
 ```sh
 (master)$ git push origin --delete my-branch
@@ -820,15 +863,15 @@ README.md foo.txt
 ```
 
 <a name="i-want-to-checkout-to-a-remote-branch-that-someone-else-is-working-on"></a>
-### 다른 사람이 작업중인 리모트 브랜치로 체크아웃 하고 싶어
+### 다른 사람이 작업중인 원격 브랜치로 체크아웃 하고 싶어
 
-우선, 리모트 레파지토리에서 모든 브랜치를 패치 받아요: 
+우선, 원격 저장소에서 모든 브랜치를 페치 받아요: 
 
 ```sh
 (master)$ git fetch --all
 ```
 
-리모트의 `daves`로 체크아웃 하고 싶다고 하면.
+원격 저장소의 `daves`로 체크아웃 하고 싶다고 하면.
 
 ```sh
 (master)$ git checkout --track origin/daves
@@ -838,22 +881,21 @@ Switched to a new branch 'daves'
 
 (`--track` 은 `git checkout -b [branch] [remotename]/[branch]` 의 축약이에요)
 
-`daves` 브랜치의 로컬 카피를 줄거에요. 그리고 푸시된 업데이트들도 리모트로 표시돼요.
+`daves` 브랜치의 로컬 카피를 줄거에요. 그리고 푸시된 업데이트들도 원격 브랜치로 표시돼요.
 
-### 현재 로컬 브랜치로 새로운 리모트 브랜치를 만들고 싶어
+### 현재 로컬 브랜치로 새로운 원격 브랜치를 만들고 싶어
 
 ```sh
 $ git push <remote> HEAD
 ```
 
-또한 리모트 브랜치를 현재 브랜치를 위한 업스트림으로 설정하고 싶다면, 대신 아래 방법을 써봐요:
+또한 원격 브랜치를 현재 브랜치를 위한 업스트림으로 설정하고 싶다면, 대신 아래 방법을 써봐요:
 
 ```sh
 $ git push -u <remote> HEAD
 ```
 
-`push.default` 설정의 `upstream` 모드와 `simple`모드 (2.0 버전의 깃의 기본)와 함께,
-아래 커맨드는 이전에 `-u` 옵션으로 등록된 리모트 브랜치와 관련된 현재 브랜치를 푸시할거에요:
+`push.default` 설정을 `upstream` 모드나 `simple` 모드 (Git 2.0에서 기본값)로 해 두면, 아래 커맨드는 현재 브랜치를 이전에 `-u` 옵션으로 등록한 원격 브랜치로 푸시할 거에요:
 
 ```sh
 $ git push
@@ -861,9 +903,9 @@ $ git push
 
 `git push`의 다른 모드의 동작은 [`push.default` 문서](https://git-scm.com/docs/git-config#git-config-pushdefault)에 설명돼 있어요.
 
-### 리모트 브랜치를 로컬 브랜치를 위한 업스트림으로 설정하고 싶어
+### 원격 브랜치를 로컬 브랜치의 업스트림으로 설정하고 싶어
 
-리모트 브랜치를 현재 쓰고 있는 로컬 브랜치를 위한 업스트림으로 설정할 수 있어요:
+원격 브랜치를 현재 쓰고 있는 로컬 브랜치의 업스트림으로 설정할 수 있어요:
 
 ```sh
 $ git branch --set-upstream-to [remotename]/[branch]
@@ -871,17 +913,16 @@ $ git branch --set-upstream-to [remotename]/[branch]
 $ git branch -u [remotename]/[branch]
 ```
 
-다른 로컬 브랜치를 위한 업스트림 리모트 브랜치를 설정하려면:
+다른 로컬 브랜치에 업스트림 원격 브랜치를 설정하려면:
 
 ```sh
 $ git branch -u [remotename]/[branch] [local-branch]
 ```
 
 <a name="i-want-to-set-my-HEAD-to-track-the-default-remote-branch"></a>
+### HEAD를 기본 원격 브랜치로 트래킹하도록 설정하고 싶어
 
-### HEAD를 기본 리모트 브랜치로 트래킹하도록 설정하고 싶어
-
-리모트 브랜치를 확인해보는 것으로, HEAD가 트래킹 중인 리모트 브랜치를 볼 수 있어요. 몇몇 경우에는, 원하던 브랜치가 아닐거에요.
+원격 브랜치를 확인해보는 것으로, HEAD가 트래킹 중인 원격 브랜치를 볼 수 있어요. 몇몇 경우에는, 원하던 브랜치가 아닐거에요.
 
 ```sh
 $ git branch -r
@@ -896,9 +937,9 @@ $ git remote set-head origin --auto
 origin/HEAD set to master
 ```
 
-### 다른 브랜치에 변경점을 잘못 남겼어
+### 잘못된 브랜치에서 변경사항을 만들었어
 
-커밋 되지 않은 변경점, 거기다 잘못된 브랜치에 하고 있었다면 변경점을 스테이시 하고 원하는 브랜치로 가 스테이시 어플라이 해요:
+아직 커밋하지는 않았는데 잘못된 브랜치에서 작업하는 것을 깨달았어요. 변경점을 스태시에 보관하고, 올바른 브랜치로 이동해서 다시 적용하세요.
 
 ```sh
 (wrong_branch)$ git stash
@@ -906,13 +947,12 @@ origin/HEAD set to master
 (correct_branch)$ git stash apply
 ```
 
-## 리베이스와 머지
+## 리베이스와 병합
 
 <a name="undo-rebase"></a>
-### 리베이스/머지 한 걸 되돌리고 싶어
+### 리베이스/병합한 걸 되돌리고 싶어
 
-현재 브랜치를 의도하지 않던 브랜치로 머지 또는 리베이스 했거나, 리베이스/머지 도중에 완료하거나 끝내지 못했을거에요.
-깃은 위험한 과정 전에 원래의 HEAD 포인트를 ORIG_HEAD라 불리는 변수에 보관해요, 그러니 리베이스/머지 전 상태로 브랜치를 복구하기 간단해요.
+현재 브랜치를 잘못된 브랜치로 병합 또는 리베이스 했거나, 리베이스/병합 과정을 제대로 이해하지 못했거나 제대로 끝내지 못했을 거에요. Git은 위험한 작업을 하기 전에 원래의 HEAD 포인트를 ORIG_HEAD라 불리는 변수에 보관해요. 그러니 리베이스/병합 전 상태로 브랜치를 복원하는건 간단해요.
 
 ```sh
 (my-branch)$ git reset --hard ORIG_HEAD
@@ -921,12 +961,8 @@ origin/HEAD set to master
 <a name="force-push-rebase"></a>
 ### 리베이스를 했는데, 강제 푸시하고 싶진 않아
 
-아쉽게도 그런 변경점을 리모트 브랜치에 반영하려면 강제 푸시밖에 방법이 없어요. 이력을 변경해왔기 때문이죠.
-리모트 브랜치는 강제 푸시 외엔 적용 해주지 않을거에요.
-많은 분들이 머지 워크플로우를 리베이스 워크플로우보다 선호하는 많이 이유 중 하나죠 - 큰 팀에선 개발자의 강제 푸시로 곤란해질 수 있어요.
-주의해서 쓰세요.
-리베이스를 그나마 안전하게 쓰는 방법은 리모트 브랜치의 모든 변경점과 똑같이 반영하는게 아니라 대신에 이렇게 해봐요:  
-
+아쉽게도 그런 변경점을 원격 브랜치에 반영하려면 강제 푸시밖에 방법이 없어요. 커밋 이력을 변경했기 때문이죠. 강제 푸시를 하지 않는 이상 원격 브랜치는 변경사항을 받아들이지 않을 거에요. 리베이스 작업흐름 보다는 병합 작업흐름을 이용하는 주된 이유입니다. 큰 팀에선 강제 푸시하는 개발자 새끼때문에 모두가 혼파망을 겪을 수 있어요. 그러니까 리베이스는 조심해서 사용해야 해요.
+리베이스를 조금 더 안전하게 쓰려면, 당신이 만든 변경사항을 원격 브랜치에 적용하는 방법 대신, 이렇게 해 보세요.
 
 ```sh
 (master)$ git checkout my-branch
@@ -939,25 +975,22 @@ origin/HEAD set to master
 
 
 <a name="interactive-rebase"></a>
-### 커밋끼리 합치고 싶어
+### 커밋 여러개를 하나로 합쳐야 해
 
-`master`에 풀 리퀘스트가 될 브랜치에서 작업하고 있다고 가정해봐요.
-가장 간단한 경우는 원하는게 *모든* 커밋을 하나의 커밋으로 합치고 변경점의 시간을 신경쓰지 않아도 되는 것일 때, 리셋하고 커밋 다시하면 돼요.
-마스터 브랜치가 최신이고 모든 변경점이 커밋된 것만 확인한 다음:
+`master`에 풀 리퀘스트가 될 브랜치에서 작업하고 있다고 가정해봐요. 가장 간단한 경우로, 원하는게 *모든* 커밋을 하나의 커밋으로 합치고 커밋의 타임스탬프를 버려도 된다면, 그냥 리셋하고 다시 커밋하면 돼요. 마스터 브랜치가 최신이고 모든 변경점이 커밋된 것만 확인한 다음:
 
 ```sh
 (my-branch)$ git reset --soft master
 (my-branch)$ git commit -am "New awesome feature"
 ```
 
-좀더 조정하고, 시간기록까지 보관하고 싶다면, 대화형 리베이스가 필요할거에요.
+좀더 세세하게 조정하고 싶고, 시간기록까지 보관하고 싶다면, 대화형 리베이스가 필요할거에요.
 
 ```sh
 (my-branch)$ git rebase -i master
 ```
 
-만약 다른 브랜치로 붙는 작업을 하는게 아니라면, `HEAD`을 기준으로 리베이스 해야해요.
-예로 마지막 2개의 커밋을 스쿼시(기존 커밋에 반영해넣는)하고 싶다면 `HEAD~2`로 리베이스 해요. 3개라면 `HEAD~3`으로 하구요.
+만약 다른 브랜치에서 작업한게 아니라면, `HEAD`와 상대적인 차이를 가지고 리베이스 해야해요. 예로 마지막 2개의 커밋을 쓰가버리고 싶다면 `HEAD~2`를 기준으로 리베이스 하세요. 마지막 3개를 쓰까버리려면  `HEAD~3`을 기준으로 하는 식입니다.
 
 ```sh
 (master)$ git rebase -i HEAD~2
@@ -990,7 +1023,7 @@ pick e3851e8 another fix
 # Note that empty commits are commented out
 ```
 
-모든 `#`으로 시작하는 주석줄은 리베이스에 영향을 주진 않아요. 
+`#`으로 시작하는 줄은 주석이라 리베이스에 영향을 주지 않아요. 
 
 다음으로 `pick` 부분을 다른 명령어로 바꾸거나, 해당하는 라인을 지워서 커밋을 지울 수도 있어요.
 
@@ -1033,11 +1066,8 @@ Newer, awesomer features
 (master)$ Successfully rebased and updated refs/heads/master.
 ```
 
-#### 안전한 머지 전략
-
-`--no-commit`는 머지는 하지만 실패하고 자동 커밋이 안된것처럼 보이는데, 커밋하기전에 머지 결과를 보고 추가로 조정할 수 있게 해줘요.
-`no-ff`는 피쳐 브랜치가 있었다는 증거를 남기고, 이력을 일관되게 가지게 해요.
-
+#### 안전한 병합 전략
+`--no-commit`는 병합을 수행하지만, 병합이 실패한 것 마냥 자동 커밋을 하지 않으므로, 커밋하기 전에 병합 결과를 확인하고 추가로 조정할 수 있게 해 줘요. `no-ff` 는 기능 브랜치가 있었다는 증거를 남기고, 프로젝트 이력을 일관되게 유지해 줘요.
 
 ```sh
 (master)$ git merge --no-ff --no-commit my-branch
@@ -1052,24 +1082,33 @@ Newer, awesomer features
 <a name="rebase-unpushed-commits"></a>
 #### 푸시 되지 않은 커밋만 합치고 싶어
 
-가끔 여러가지 작업 도중인 커밋을 푸시하기 전에 합치고 싶을거에요.
-다른 누군가가 벌써 참고해서 커밋을 만들고 있을테니 이미 푸시된 커밋을 잘못 합치길 바라진 않을거에요.
+때때로 작업 도중인 커밋을 하나로 합쳐서 업스트림으로 푸시하고 싶을거에요. 이미 업스트림으로 푸시한 커밋을 실수로 하나로 병합하고 싶지는 않을 거에요. 누군가 그 커밋을 반영한 다른 작업을 했을지도 모르니까요.
 
 ```sh
 (master)$ git rebase -i @{u}
 ```
 
-이 명령은 아직 푸시하지 않은 커밋만으로 대화형 리베이스를 실행해요. 그러니 목록 내에 있는 어떤 커밋이든 재정렬/수정/합치기 안전해요. 
+이 명령은 아직 푸시하지 않은 커밋만 목록에 넣어서 대화형 리베이스를 실행해요. 그러니 목록 내의 커밋을 재정렬/수정/합치기 해도 안전해요. 
 
-#### 머지를 중단해야해
+#### 병합을 중단해야해
 
-때때로 머지는 어떤 파일에 문제를 일으킬 수도 있어요, 이 경우 옵션 `abort`으로 현재 충돌 해결 프로세스를 중단하고 병합하기 전 상태로 다시 구성할 수 있어요.
+때때로 병합은 어떤 파일에 문제를 일으킬 수도 있어요, 이 경우 옵션 `abort`으로 현재 충돌 해결 프로세스를 중단하고 병합하기 전 상태로 다시 구성할 수 있어요.
 
 ```sh
 (my-branch)$ git merge --abort
 ```
 
-이 명령은 1.7.4 버전부터 쓸 수 있어요.
+이 명령은 Git 버전 >= 1.7.4 버전부터 쓸 수 있어요.
+
+### 브랜치의 부모 커밋을 바꿔야 해
+
+마스터 브랜치, 마스터에서 따온 기능-1 브랜치, 그리고 기능-1 브랜치에서 따온 기능-2 브랜치가 있다고 해 봅시다. 기능-1 브랜치에 새 커밋을 만들었어요. 그럼 기능-2 브랜치의 부모 커밋은 더 이상 정확하지 않아요 (기능-1 브랜치의 head에서 따 왔으니까, 기능-1 브랜치의 head를 가리키고 있어야 하잖아요.) 이 상황은 `git rebase --onto` 로 해결할 수 있어요.
+
+```sh
+(feature-2)$ git rebase --onto feature-1 <the first commit in your feature-2 branch that you don't want to bring along> feature-2
+```
+
+이 방법은 아직 병합되지는 않은 다른 기능을 기반으로 한 기능을 만들었는데, 기능-1 브랜치의 버그픽스가 기능-2 브랜치에도 반영되어야 하는 좀 꼬인 상황에 유용해요.
 
 ### 브랜치내 모든 커밋이 머지됐는지 확인해
 
@@ -1137,89 +1176,89 @@ Changes not staged for commit:
 (master*)$ git checkout --ours README.md
 ```
 
-- *머지*할때, `--ours`를 쓰면 로컬 브랜치의 변경점 유지하고, `--theirs` 는 다른 브랜치의 변경점를 유지해요.
-- *리베이스*할 땐, `--theirs`가 로컬 브랜치의 변경점을 유지하고 `--ours`는 다른 브랜치의 변경점을 유지해요. 이런 차이에 관한 설명은 Git 정식 문서 중 [이 문서](https://git-scm.com/docs/git-rebase#git-rebase---merge)를 보세요. 
+- *병합* 할 때, `--ours`를 쓰면 로컬 브랜치의 변경점을 유지하고, `--theirs` 는 다른 브랜치의 변경점를 유지해요.
+- *리베이스* 할 땐, `--theirs`가 로컬 브랜치의 변경점을 유지하고 `--ours`는 다른 브랜치의 변경점을 유지해요. 이런 차이에 관한 설명은 Git 정식 문서 중 [이 문서](https://git-scm.com/docs/git-rebase#git-rebase---merge)를 보세요. 
 
-만약 머지가 더 복잡하면, 비주얼 디프 에디터를 쓸 수도 있어요:
+만약 병합이 매우 복잡하면, 시각적으로 차이점을 보여주는 편집기를 쓸 수도 있어요:
 
 ```sh
 (master*)$ git mergetool -t opendiff
 ```
 
-코드의 충돌을 해결하고 테스트가 해결되고 나면, 바뀐 파일 내용을 `git add` 해주고, `git rebase --continue`로 리베이스를 이어서 해요.
+코드의 충돌을 해결하고 테스트까지 문제없이 통과했다면, 바뀐 파일 내용을 `git add` 해주고, `git rebase --continue`로 리베이스를 계속 하세요.
 
 ```sh
 (my-branch)$ git add README.md
 (my-branch)$ git rebase --continue
 ```
 
-만약 모든 충돌을 개선한 내용이 커밋 전과 동일한 트리 구조를 가진다면, 대신에 `git rebase --skip`를 해야 해요.
+모든 충돌을 해결한 내용이 커밋 전과 동일한 트리 구조를 가진다면, 대신에 `git rebase --skip`를 해야 해요.
 
-리베이스 중 멈추고 싶은 어떤 시점이거나 원래 상태의 브랜치로 돌아가고 싶다면, 이렇게 할 수 있어요:  
+어느 때건 전체 리베이스를 중단하고 원래 상태의 브랜치로 돌아가고 싶다면, 이렇게 할 수 있어요:  
 
 ```sh
 (my-branch)$ git rebase --abort
 ```
 
 <a name="stashing"></a>
-## 스테이시
+## 스태시
 
-### 모든 변경점 스테이시 하기
+### 모든 변경점을 스태시에 보관하기
 
-작업중인 디렉토리에서의 변경한 내용 전부를 스테이시 하려면
+작업중인 디렉토리에서의 변경한 내용 전부를 스태시에 보관하려면
 
 ```sh
 $ git stash
 ```
 
-트래킹 되지 않은 파일까지도 포함하려면, `-u` 옵션을 써요.
+추적되지 않는 파일까지도 포함하려면, `-u` 옵션을 쓰세요.
 
 ```sh
 $ git stash -u
 ```
 
-### 특정 파일들만 스테이시 하기
+### 특정 파일들만 스태시에 보관하기
 
-작업중인 디렉토리에서 한 파일만 스테이시 하기
+작업 디렉토리에서 한 파일만 스태시에 보관하려면
 
 ```sh
 $ git stash push working-directory-path/filename.ext
 ```
 
-작업중인 디렉토리에서 여러 파일 스테이시 하기
+작업 디렉토리에서 여러 파일을 스태시에 보관하려면
 
 ```sh
 $ git stash push working-directory-path/filename1.ext working-directory-path/filename2.ext
 ```
 
 <a name="stash-msg"></a>
-### 메세지와 함께 스테이시 하기
+### 메세지와 함께 보관하기
 
 ```sh
 $ git stash save <message>
 ```
 
 <a name="stash-apply-specific"></a>
-### 특정 스테이시 목록에서 가져와 적용하기 
+### 목록에서 특정 스태시를 가져와서 적용하기 
 
-메세지 작성된 스테이시 리스트 먼저 확인하세요
+우선 스태시 목록과 메시지를 확인하세요.
 
 ```sh
 $ git stash list
 ```
 
-그런 다음 리스트 내 특정 스테이시를 적용해요
+그런 다음 리스트에서 특정 스태시를 적용하세요
 
 ```sh
 $ git stash apply "stash@{n}"
 ```
 
-여기에서, 'n' 은 스택 안에서 스테이시의 위치를 나타내요. 젤 위에 있는 스테이시가 0 일거에요.
+여기에서, 'n' 은 스택 안에서 스태시의 위치를 나타내요. 가장 위에 있는 스태시가 0 이에요.
 
 
 ## 찾아보기
 
-### 어떤 커밋에서 문자열을 찾고 싶어
+### 모든 커밋에서 문자열을 찾고 싶어
 
 특정한 문자열이 포함된 어떤 커밋을 찾으려면, 이런 구조로 쓸 수 있어요:
 
@@ -1348,10 +1387,7 @@ $ git update-ref refs/tags/<tag_name> <hash>
 
 ### 지워진 패치
 
-만약 깃헙에서 누군가가 풀리퀘스트를 보냈는데 이미 원래의 포크가 지워졌다면,
-url을 쓸 수 없게 돼 레파지토리를 클론할 수 없거나 [.diff, .patch](https://github.com/blog/967-github-secrets)와 같은 `git am`를 쓸 수 없을 거에요.
-하지만 [깃헙의 특별한 참조](https://gist.github.com/piscisaureus/3342247)을 이용해서 풀 리퀘스트 자체를 확인할 수 있어요.
-PR#1의 내용을 pr_1이란 새 브랜치로 패치 받으려면:
+만약 깃헙에서 누군가가 풀리퀘스트를 보냈는데 이후 그 사람의 포크를 지워버렸다면, 그 저장소를 복제할 수도 없고 `git am`도 쓸 수 없어요. [.diff, .patch](https://github.com/blog/967-github-secrets) 주소가 날아가 버리니까요. 하지만 PR 자체는 [깃헙의 특별한 참조](https://gist.github.com/piscisaureus/3342247)을 이용해서 확인할 수 있어요. PR#1의 내용을 pr_1이란 새 브랜치로 페치 받으려면:
 
 ```sh
 $ git fetch origin refs/pull/1/head:pr_1
@@ -1359,23 +1395,43 @@ From github.com:foo/bar
  * [new ref]         refs/pull/1/head -> pr_1
 ```
 
-### Zip파일로 레파지토리 추출하기
+### Zip파일로 저장소 내보내기
 
 ```sh
 $ git archive --format zip --output /full/path/to/zipfile.zip master
+```
+### 같은 이름의 브랜치와 태그를 푸시하기
+
+로컬 브랜치와 같은 이름의 태그가 원격 저장소에 존재한다면, 일반적인 `$ git push <remote> <branch>` 명령어로 푸시할 때 다음과 같은 오류를 볼 거에요.
+
+```sh
+$ git push origin <branch>
+error: dst refspec same matches more than one.
+error: failed to push some refs to '<git server>'
+```
+
+헤드 참조를 푸시한다고 명시하면 해결할 수 있어요
+
+```sh
+$ git push origin refs/heads/<branch-name>
+```
+
+로컬 태그를 같은 이름의 브랜치가 존재하는 원격 저장소로 푸시하는 경우에도 비슷한 명령어를 쓸 수 있어요.
+
+```sh
+$ git push origin refs/tags/<tag-name>
 ```
 
 ## 파일 추적하기
 
 <a href="i-want-to-change-a-file-names-capitalization-without-changing-the-contents-of-the-file"></a>
-
 ### 파일 내용엔 변경이 없이 파일 이름을 앞글자만 대문자로 바꾸고 싶어
 
 ```sh
 (master)$ git mv --force myfile MyFile
 ```
 
-### 깃 풀 받을때 로컬 파일을 덮어씌우고 싶어
+### Git 풀 받을때 로컬 파일을 덮어씌우고 싶어
 
 ```sh
 (master)$ git fetch --all
@@ -1383,13 +1439,13 @@ $ git archive --format zip --output /full/path/to/zipfile.zip master
 ```
 
 <a href="remove-from-git"></a>
-### 파일을 로컬에는 보관하고 깃에서 지우고 싶어
+### 파일을 로컬에는 보관하고 Git에서 지우고 싶어
 
 ```sh
 (master)$ git rm --cached log.txt
 ```
 
-### 특정한 버전대로 파일을 복구하고 싶어
+### 특정한 리비전으로 파일을 복구하고 싶어
 
 복구하고 싶은 해시가 c5f567 이라고 가정하면:
 
@@ -1403,7 +1459,7 @@ c5f567 한 단계전으로 복구하고 싶다면, c5f567~1로 적어줘요:
 (master)$ git checkout c5f567~1 -- file1/to/restore file2/to/restore
 ```
 
-### 커밋과 브랜치 간의 특정 파일 변경 이력이 필요해
+### 커밋이나 브랜치 사이에서 특정 파일의 변경 이력이 필요해
 
 마지막 커밋과 c5f567으로 부터의 차이를 비교하고 싶다고 가정하면:
 
@@ -1418,11 +1474,25 @@ $ git diff HEAD:path_to_file/file c5f567:path_to_file/file
 $ git diff master:path_to_file/file staging:path_to_file/file
 ```
 
+### 특정 파일의 변경점을 Git이 무시하도록 하고 싶어
+
+커밋되면 안 되는 민감한 정보를 로컬에서만 저장하는 설정 템플릿이나 다른 파일에 쓰면 유용합니다.
+
+```sh
+$ git update-index --assume-unchanged file-to-ignore
+```
+
+다만 이 방법은 그 파일을 소스 제어에서 제거하지 *않는다는* 점을 명심하세요 - 단지 로컬에서 무시될 뿐입니다. 이를 취소하고 Git이 다시 변경사항을 확인하게 하려면, 다음 명령어로 무시 플래그를 비우게 하세요.
+
+```sh
+$ git update-index --no-assume-unchanged file-to-stop-ignoring
+```
+
 ## 설정
 
-### 깃 명령어 몇 개를 앨리어스 등록하고 싶어
+### Git 명령어 몇 개를 앨리어스 등록하고 싶어
 
-맥OS나 리눅스에는, 깃 설정 파일이 ```~/.gitconfig``` 에 있어요. 단축용으로 (몇개는 평소 쓰는 용도로) 앨리어스 몇개를 아래와 같이 계속 추가해오고 있어요. 
+맥OS나 리눅스에는, Git 설정 파일이 ```~/.gitconfig``` 에 있어요. 내가 단축용으로 쓰는 (그리고 오타로 자주 치는) 앨리어스를 예시 삼아 ```[alias]``` 섹션에 추가해 봤어요.
 
 ```vim
 [alias]
@@ -1447,9 +1517,9 @@ $ git diff master:path_to_file/file staging:path_to_file/file
     zap = fetch -p
 ```
 
-### 레파지토리에 빈 디렉토리를 추가하고 싶어
+### 저장소에 빈 디렉토리를 추가하고 싶어
 
-못해요! 깃은 지원하지 않거든요, 근데 꼼수가 있어요. 디렉토리에에 .gitignore 파일을 아래 내용으로 만들어요:  
+못해요! Git은 빈 디렉터리를 지원하지 않거든요. 근데 꼼수가 있어요. 디렉토리에에 .gitignore 파일을 아래 내용으로 만들어요:  
 
 ```
  # Ignore everything in this directory
@@ -1458,7 +1528,7 @@ $ git diff master:path_to_file/file staging:path_to_file/file
  !.gitignore
 ```
 
-다른 일반적인 컨벤션은 그 폴더 안에 .gitkeep이라는 이름의 빈 파일을 만드는 거에요.
+다른 일반적인 규칙은 그 폴더 안에 .gitkeep이라는 이름의 빈 파일을 만드는 거에요.
 
 ```sh
 $ mkdir mydir
@@ -1467,9 +1537,9 @@ $ touch mydir/.gitkeep
 
 .keep이란 이름으로도 쓸 수 있는데요, 두번째 라인이 ```touch mydir/.keep```가 되어야겠죠.
 
-### 레파지토리 유저명과 비밀번호를 캐시해두고 싶어
+### 저장소 유저명과 비밀번호를 캐시해두고 싶어
 
-인증이 필요한 레파지토리를 가지고 있을 텐데요.
+인증이 필요한 저장소를 가지고 있을 텐데요.
 이런 경우 유저명과 비밀번호를 캐시할 수 있을테니 매번 푸시/풀 할 때마다 입력할 필욘 없어요.
 크리덴셜 헬퍼가 해줄거에요.
 
@@ -1483,7 +1553,7 @@ $ git config --global credential.helper 'cache --timeout=3600'
 # Set the cache to timeout after 1 hour (setting is in seconds)
 ```
 
-### 깃이 권한과 파일모드 변경을 무시하게 만들고 싶어   
+### Git이 권한과 파일모드 변경을 무시하게 만들고 싶어   
 
 ```sh
 $ git config core.fileMode false
@@ -1495,9 +1565,9 @@ $ git config core.fileMode false
 $ git config --global core.fileMode false
 ```
 
-### 글로벌 유저로 설정해두고 싶어
+### 글로벌 유저를 설정해두고 싶어
 
-모든 로컬 레파지토리에 사용되는 유저 정보를 설정하려면, 그리고 버전 이력을 리뷰할때 알아보기 쉬운 이름으로 설정하려면: 
+모든 로컬 저장소에서 사용되는 유저 정보를 설정하려면, 그리고 버전 이력을 리뷰할때 알아보기 쉬운 이름으로 설정하려면: 
 
 ```sh
 $ git config --global user.name “[firstname lastname]”
@@ -1509,9 +1579,9 @@ $ git config --global user.name “[firstname lastname]”
 git config --global user.email “[valid-email]”
 ```
 
-### 깃에 명령어 색상을을 넣고 싶어
+### Git에 명령줄 색상을 넣고 싶어
 
-손 쉬운 리뷰를 위한 깃 명령줄 자동 색상을 설정 하려면:
+손 쉬운 리뷰를 위한 Git 명령줄 자동 색상을 설정 하려면:
 
 ```sh
 $ git config --global color.ui auto
@@ -1519,10 +1589,9 @@ $ git config --global color.ui auto
 
 ## 뭘 잘못했는지 모르겠어
 
-음, 망했군요. 뭔가를 `reset` 했거나, 다른 브랜치로 머지했거나, 지금은 찾질 못하는 커밋으로 강제 푸시를 해버렸군요.
-알다시피, 어떤 시점에선, 잘 하고 있었고 거기로 돌아가고 싶겠죠.
-이게 바로 `git reflog`의 존재이유에요.  `reflog` 는 브랜치 끝의 어떤 변경점이든 브랜치나 태그에 의해 참조되지 않더라도 다 보관해요.       
-기본적으로, HEAD가 변경되는 모든 경우, 리플로그에 새로운 입력이 추가돼요. 아쉽게도 이 기능은 로컬 레파지토리에서만 동작해고, 오직 움직임만을 트래킹해요 (예를 들자면 어디에도 기록되지 않았던 파일의 변경은 아니에요)
+음, 망했군요. 뭔가를 `reset` 했거나, 잘못된 브랜치에 병합했거나, 강제 푸시를 했는데 커밋을 못 찾고 있는 모양이군요. 알다시피, 어떤 시점에선, 모든게 괜찮았고, 그 시점으로 돌아가고 싶겠죠.
+
+이게 바로 `git reflog`의 존재이유에요.  `reflog` 는 브랜치 끝에 가해지는 변경점을 모두 보관해요. 그 브랜치 끝이 브랜치 이름이나 태그에 의해 참조되지 않더라도 말이죠. 기본적으로, HEAD가 변경될 때마다 reflog에 새로운 항목이 추가돼요. 아쉽게도 이 기능은 로컬 저장소에서만 동작하고, 오직 움직임만을 트래킹해요 (예를 들자면, 어디에도 기록되지 않았던 파일의 변경사항은 추적되지 않아요)
 
 ```sh
 (master)$ git reflog
@@ -1531,18 +1600,15 @@ $ git config --global color.ui auto
 c10f740 HEAD@{2}: checkout: moving from master to 2.2
 ```
 
-이 리플로그는 마스터에서 2.2 브랜치로 체크아웃하고 되돌린 것을 보여주네요.
-저기에선, 오래된 커밋으로 리셋하기 어려워요. 최신 활동이 `HEAD@{0}` 상단 라벨로 보여지네요.
+위의 reflog는 마스터에서 2.2 브랜치로 체크아웃하고 되돌린 것을 보여주네요. 그 뒤에, 더 오래된 커밋으로 하드리셋을 했어요. 가장 최근의 활동은 가장 위에 표시되고, `HEAD@{0}` 라벨로 표시돼요.
 
-만약 실수로 뒤로 이동했다면,
-리플로그는 실수로 지워진 2개의 커밋 전 상태인 (0254ea7)를 가리키는 커밋 마스터를 포함할거에요.
+잘못해서 뒤로 옮겨간 것이라면, reflog는 당신이 실수로 2커밋을 날려버리기 전에 마스터가 가리키고 있던 (0254ea7) 커밋을 보관하고 있을 거에요.
 
 ```sh
 $ git reset --hard 0254ea7
 ```
 
-`git reset`을 쓰는 것으로 마스터를 이전 커밋으로 되돌릴 수 있어요.
-이력이 실수로 변경됐을 때의 안정망을 제공할거에요.  
+`git reset`을 쓰는 것으로 이제 마스터를 이전 커밋으로 되돌릴 수 있어요. 이력이 실수로 변경됐을 때의 안전그물을 제공할 거에요.  
 
 ([여기](https://www.atlassian.com/git/tutorials/rewriting-history/git-reflog)에서 복제해와 수정했어요).
 
@@ -1551,38 +1617,42 @@ $ git reset --hard 0254ea7
 
 ## 도서
 
-* [Pro Git](https://git-scm.com/book/en/v2) - Scott Chacon 과 Ben Straub의 훌륭한 깃 책
-* [Git Internals](https://github.com/pluralsight/git-internals-pdf) - Scott Chacon의 또다른 훌륭한 깃 책
+* [Learn Enough Git to Be Dangerous](https://www.learnenough.com/git-tutorial) - A book by Michael Hartl covering Git from basics
+* [Pro Git](https://git-scm.com/book/en/v2) - Scott Chacon and Ben Straub's excellent book about Git
+* [Git Internals](https://github.com/pluralsight/git-internals-pdf) - Scott Chacon's other excellent book about Git
 
 ## 튜토리얼
 
-* [Atlassian's Git tutorial](https://www.atlassian.com/git/tutorials) 기초부터 고급까지 튜토리얼과 함께 하는 깃 제대로 얻기
-* [Learn Git branching](https://learngitbranching.js.org/) 대화형 웹 기반의 브랜치/머지/리베이스 튜토리얼
+* [19 Git Tips For Everyday Use](https://www.alexkras.com/19-git-tips-for-everyday-use) - A list of useful Git one liners
+* [Atlassian's Git tutorial](https://www.atlassian.com/git/tutorials) Get Git right with tutorials from beginner to advanced.
+* [Learn Git branching](https://learngitbranching.js.org/) An interactive web based branching/merging/rebasing tutorial
 * [Getting solid at Git rebase vs. merge](https://medium.com/@porteneuve/getting-solid-at-git-rebase-vs-merge-4fa1a48c53aa)
-* [git-workflow](https://github.com/asmeurer/git-workflow) - [Aaron Meurer](https://github.com/asmeurer)의 어떻게 깃을 통해 오픈소스 레파지토리에 어떻게 기여할까
-* [GitHub as a workflow](https://hugogiraudel.com/2015/08/13/github-as-a-workflow/) - 깃헙을 워크플로우로 쓰는 흥미로운 작업, 특히 빈 풀 리퀘스트를 활용하는
-* [Githug](https://github.com/Gazler/githug) - 더 일반적인 깃 워크플로우를 배우는 게임
+* [Git Commands and Best Practices Cheat Sheet](https://zeroturnaround.com/rebellabs/git-commands-and-best-practices-cheat-sheet) - A Git cheat sheet in a blog post with more explanations
+* [Git from the inside out](https://codewords.recurse.com/issues/two/git-from-the-inside-out) - A tutorial that dives into Git's internals
+* [git-workflow](https://github.com/asmeurer/git-workflow) - [Aaron Meurer](https://github.com/asmeurer)'s howto on using Git to contribute to open source repositories
+* [GitHub as a workflow](https://hugogiraudel.com/2015/08/13/github-as-a-workflow/) - An interesting take on using GitHub as a workflow, particularly with empty PRs
+* [Githug](https://github.com/Gazler/githug) - A game to learn more common Git workflows
 
 ## 스크립트와 도구
 
-* [firstaidgit.io](http://firstaidgit.io/) 가장 많이 묻는 깃 질문의, 검색가능한 모음
-* [git-extra-commands](https://github.com/unixorn/git-extra-commands) - 유용한 기타 깃 스크립트 모음
-* [git-extras](https://github.com/tj/git-extras) - 깃 유틸리티 -- 레파지토리 요약, repl, 변경이력 밀집도, 작성자 커밋 비율 등
-* [git-fire](https://github.com/qw3rtman/git-fire) - git-fire는 모든 현재 파일을 추가,커밋,새 브랜치로 푸시(머지를 예방하기 위한) 등 비상사태를 도와주는 플러그인
-* [git-tips](https://github.com/git-tips/tips) - 자그마한 깃 팁들
-* [git-town](https://github.com/Originate/git-town) - 포괄적이고, 높은 수준의 깃 워크플로우 지원! http://www.git-town.com
+* [firstaidgit.io](http://firstaidgit.io/) A searchable selection of the most frequently asked Git questions
+* [git-extra-commands](https://github.com/unixorn/git-extra-commands) - a collection of useful extra Git scripts
+* [git-extras](https://github.com/tj/git-extras) - GIT utilities -- repo summary, repl, changelog population, author commit percentages and more
+* [git-fire](https://github.com/qw3rtman/git-fire) - git-fire is a Git plugin that helps in the event of an emergency by adding all current files, committing, and pushing to a new branch (to prevent merge conflicts).
+* [git-tips](https://github.com/git-tips/tips) - Small Git tips
+* [git-town](https://github.com/Originate/git-town) - Generic, high-level Git workflow support! http://www.git-town.com
 
 ## GUI 클라이언트
-
-* [GitKraken](https://www.gitkraken.com/) - 완전 고급의 깃 클라이언트 Windows, Mac & Linux
-* [git-cola](https://git-cola.github.io/) - 또 다른 깃 클라이언트 Windows, OS X
-* [GitUp](https://github.com/git-up/GitUp) - 아주 독단적으로 방식으로 깃의 복잡함을 다루는 새로운 GUI
-* [gitx-dev](https://rowanj.github.io/gitx/) - 또다른 그래픽적인 깃 클라이언트 OS X
-* [Sourcetree](https://www.sourcetreeapp.com/) - 아름답고 무료인 깃 GUI 안에서 단순함과 강력함이 만났어 Windows and Mac
-* [Tower](https://www.git-tower.com/) - 그래픽 Git 클라이언트 OS X (유료)
-* [tig](https://jonas.github.io/tig/) - 깃을 위한 터민러 텍스트 모드 인터페이스
-* [Magit](https://magit.vc/) - Emacs 패키지를 위해 구현된 깃 인터페이스 
-* [GitExtensions](https://github.com/gitextensions/gitextensions) - 쉘 확장, 비주얼 스투디오 2010-2015 플러그인 그리고 독자적인 깃 레파지토리 도구
-* [Fork](https://git-fork.com/) - 빠르고 친숙한 깃 클라이언트 Mac (베타)
-* [gmaster](https://gmaster.io/) - 3-way 머지, 리팩터 분석기, 시멘틱 diff와 머지 기능의 윈도 전용 깃 클라이언트 (베타)
-* [gitk](https://git-scm.com/docs/gitk) - 간단한 레파지토리 상태를 볼 수 있는 리눅스 깃 클라이언트
+* [GitKraken](https://www.gitkraken.com/) - The downright luxurious Git client,for Windows, Mac & Linux
+* [git-cola](https://git-cola.github.io/) - another Git client for Windows and OS X
+* [GitUp](https://github.com/git-up/GitUp) - A newish GUI that has some very opinionated ways of dealing with Git's complications
+* [gitx-dev](https://rowanj.github.io/gitx/) - another graphical Git client for OS X
+* [Sourcetree](https://www.sourcetreeapp.com/) - Simplicity meets power in a beautiful and free Git GUI. For Windows and Mac.
+* [Tower](https://www.git-tower.com/) - graphical Git client for OS X (paid)
+* [tig](https://jonas.github.io/tig/) - terminal text-mode interface for Git
+* [Magit](https://magit.vc/) - Interface to Git implemented as an Emacs package.
+* [GitExtensions](https://github.com/gitextensions/gitextensions) - a shell extension, a Visual Studio 2010-2015 plugin and a standalone Git repository tool.
+* [Fork](https://git-fork.com/) - a fast and friendly Git client for Mac (beta)
+* [gmaster](https://gmaster.io/) - a Git client for Windows that has 3-way merge, analyze refactors, semantic diff and merge (beta)
+* [gitk](https://git-scm.com/docs/gitk) - a Git client for linux to allow simple view of repo state.
+* [SublimeMerge](https://www.sublimemerge.com/) - Blazing fast, extensible client that provides 3-way merges, powerful search and syntax highlighting, in active development.
